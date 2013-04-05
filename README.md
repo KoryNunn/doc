@@ -37,6 +37,8 @@ less than 1k minified
 
 ## Fast ##
 
+http://jsperf.com/closest-element
+
 # License #
 
 MIT
