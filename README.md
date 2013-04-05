@@ -13,19 +13,19 @@ A few commonly used dom traverstal and event binding techniques are not easy to 
 
 Find the 'closest' parent element to a target element:
 
-doc.closest(targetNode, parentNode/selector);
+	doc.closest(targetNode, parentNode/selector);
 
 Check if an element matches a selector:
 
-doc.is(target, selector);
+	doc.is(target, selector);
 
 Add an event listener to an element:
 
-doc.on('click', selector/element, callback);
+	doc.on('click', selector/element, callback);
 
 Delegate an event listener to a parent element:
 
-doc.on('click', selector/element, callback, parentNode/parentSelector);
+	doc.on('click', selector/element, callback, parentNode/parentSelector);
     
 # Goals #
 
