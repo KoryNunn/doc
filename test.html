@@ -107,6 +107,15 @@
                     expected: testArea
                 },
                 {
+                    name: "closest document",
+                    test: function(){
+                        var result = doc.closest(document, document);
+                        
+                        this.result = result;
+                    },
+                    expected: document
+                },
+                {
                     name: "on click",
                     test: function(){
                         var test = this;

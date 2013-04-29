@@ -1,5 +1,13 @@
-;(function(){
-	var doc = window.doc = {},
+(function (root, factory) {
+    if (typeof exports === 'object') {
+        module.exports = factory();
+    } else if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else {
+        root.crel = factory();
+    }
+}(this, function () {
+    var doc = {},
         document = window.document;
 
     function isString(thing){
@@ -22,18 +30,22 @@
         return getTarget(target).querySelectorAll(query);
     };
 
-	doc.closest = function(target, selector){
+    doc.closest = function(target, selector){
         target = getTarget(target);
+
+        if(target !== document && !target.parentNode){
+            return null;
+        }
 
         while(
             target && 
             target.parentNode && 
-            Array.prototype.slice.apply(isString(selector) ? doc.find(target.parentNode, selector) : selector.parentNode.childNodes).indexOf(target) < 0
+            Array.prototype.slice.apply(isString(selector) ? doc.find(target.parentNode, selector) : selector.parentNode ? selector.parentNode.childNodes : [selector]).indexOf(target) < 0
         ){
             target = target.parentNode;
         }
 
-        return target === document ? null : target;
+        return target === document && target !== selector ? null : target;
     };
 
     doc.is = function(target, query){
@@ -83,4 +95,14 @@
             }
         }
     };
-})();
+
+    doc.isVisible = function(element){
+        while(element.parentNode && element.style.display !== 'none'){
+            element = element.parentNode;
+        }
+
+        return element === document;
+    }
+
+    return doc;
+}));

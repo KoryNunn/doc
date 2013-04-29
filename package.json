@@ -1,0 +1,20 @@
+{
+  "name": "doc",
+  "description": "A small, simple, and fast DOM helper library",
+  "author": "Kory Nunn <knunn187@gmail.com>",
+  "tags": [
+    "DOM"
+  ],
+  "version": "0.1.0",
+  "main": "doc.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/KoryNunn/doc.git"
+  },
+  "bugs": {
+    "url": "http://github.com/KoryNunn/doc/issues"
+  },
+  "contributors": []
+}
