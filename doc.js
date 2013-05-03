@@ -53,6 +53,49 @@
         return Array.prototype.slice.call(doc.find(target.parentNode, query)).indexOf(target) >= 0;
     };
 
+    doc.addClass = function(target, classes){
+        target = getTarget(target);
+
+        var classes = classes.split(' '),
+            currentClasses = target.className.split(' ');
+
+        for(var i = 0; i < classes.length; i++){
+            var classToAdd = classes[i];
+            if(target.classList){
+                target.classList.add(classToAdd);
+            } else if(!currentClasses.indexOf(classToAdd)>=0){
+                currentClasses.push(classToAdd);
+            }
+        }
+        if(!target.classList){
+            target.className = currentClasses.join(' ');
+        }
+        return this;
+    };
+
+    doc.removeClass = function(target, classes){
+        target = getTarget(target);
+
+        var classes = classes.split(' '),
+            currentClasses = target.className.split(' ');
+
+        for(var i = 0; i < classes.length; i++){
+            var classToRemove = classes[i];
+            if(target.classList){
+                target.classList.remove(classToRemove);
+                continue;
+            }
+            var removeIndex = currentClasses.indexOf(classToRemove);
+            if(removeIndex >= 0){
+                currentClasses.splice(removeIndex, 1);
+            }
+        }
+        if(!target.classList){
+            target.className = currentClasses.join(' ');
+        }
+        return this;
+    };
+
     function addEvent(settings){
         getTarget(settings.target).addEventListener(settings.event, settings.callback, false);
     }

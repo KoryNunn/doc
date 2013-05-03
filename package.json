@@ -5,9 +5,11 @@
   "tags": [
     "DOM"
   ],
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "doc.js",
-  "dependencies": {},
+  "dependencies": {
+    "crel":">=0.0.0"  
+  },
   "devDependencies": {},
   "repository": {
     "type": "git",
