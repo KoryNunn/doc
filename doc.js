@@ -30,27 +30,27 @@
         return getTarget(target).querySelectorAll(query);
     };
 
-    doc.closest = function(target, selector){
+    doc.closest = function(target, query){
         target = getTarget(target);
-
-        if(target !== document && !target.parentNode){
-            return null;
-        }
 
         while(
             target && 
-            target.parentNode && 
-            Array.prototype.slice.apply(isString(selector) ? doc.find(target.parentNode, selector) : selector.parentNode ? selector.parentNode.childNodes : [selector]).indexOf(target) < 0
+            target.ownerDocument && 
+            !doc.is(target, query) &&
+            !(typeof query === 'string' ? doc.find(target, query).length : Array.prototype.slice.call(target.childNodes).indexOf(query)>=0)
         ){
             target = target.parentNode;
         }
 
-        return target === document && target !== selector ? null : target;
+        return target === document && target !== query ? null : target;
     };
 
     doc.is = function(target, query){
         target = getTarget(target);
-        return Array.prototype.slice.call(doc.find(target.parentNode, query)).indexOf(target) >= 0;
+        if(!target.ownerDocument || typeof query !== 'string'){
+            return target === query;
+        }
+        return target === query || Array.prototype.slice.call(doc.find(target.parentNode, query)).indexOf(target) >= 0;
     };
 
     doc.addClass = function(target, classes){
