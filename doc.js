@@ -36,8 +36,7 @@
         while(
             target && 
             target.ownerDocument && 
-            !doc.is(target, query) &&
-            !(typeof query === 'string' ? doc.find(target, query).length : Array.prototype.slice.call(target.childNodes).indexOf(query)>=0)
+            !doc.is(target, query)
         ){
             target = target.parentNode;
         }

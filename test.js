@@ -1,6 +1,6 @@
 window.onload = function(){
 
-    var doc = require('./doc.js'),
+    var doc = window.doc = require('./doc.js'),
         crel = require('crel');
 
     var testArea = document.querySelectorAll('.testArea')[0];
