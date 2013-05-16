@@ -102,10 +102,12 @@
     doc.on = function(events, target, callback, proxy){
         var removeCallbacks = [];
         
-        events = events.split(' ');
+        if(typeof events === 'string'){
+            events = events.split(' ');
+        }
 
         for(var i = 0; i < events.length; i++){
-            var eventSettings = [];
+            var eventSettings = {};
             if(proxy){
                 if(proxy === true){
                     proxy = document;
@@ -132,11 +134,33 @@
         return function(){
             while(removeCallbacks.length){
                 var removeCallback = removeCallbacks.pop();
-
-                getTarget(removeCallback.target).removeEventListener(removeCallback.event, getTarget(removeCallback.target));
+                getTarget(removeCallback.target).removeEventListener(removeCallback.event, removeCallback.callback);
             }
         }
     };
+
+    doc.off = function(events, target, callback, reference){
+        if(typeof events === 'string'){
+            events = events.split(' ');
+        }
+
+        if(typeof callback !== 'function'){
+            reference = callback;
+            callback = null;
+        }
+
+        reference = reference ? getTarget(reference) : document;
+
+        var targets = find(target, reference);
+
+        for(var targetIndex = 0; targetIndex < targets.length; targetIndex++){
+            var currentTarget = targets[targetIndex];
+
+            for(var i = 0; i < events.length; i++){
+                currentTarget.removeEventListener(events[i], callback);
+            }
+        }
+    }
 
     doc.isVisible = function(element){
         while(element.parentNode && element.style.display !== 'none'){

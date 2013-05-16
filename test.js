@@ -102,6 +102,27 @@ window.onload = function(){
             expected: true
         },
         {
+            name: "'off' on click",
+            test: function(){
+                var test = this;
+
+                testArea.appendChild(crel('div', {'class':'things'}));
+
+                var off = doc.on('click', '.things', function(){
+                    test.result++;
+                });
+
+                doc.find('.things')[0].click();
+
+                off();
+
+                doc.find('.things')[0].click();
+
+            },
+            expected: 1,
+            result: 0
+        },
+        {
             name: "on click delegated",
             test: function(){
                 var test = this;
