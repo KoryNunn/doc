@@ -5,7 +5,7 @@
   "tags": [
     "DOM"
   ],
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "doc.js",
   "dependencies": {
     "crel":">=0.0.0"  

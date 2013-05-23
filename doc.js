@@ -27,7 +27,11 @@
             query = target;
             target = document;
         }
-        return getTarget(target).querySelectorAll(query);
+        target = getTarget(target);
+        if(!target){
+            return [];
+        }
+        return target.querySelectorAll(query);
     };
 
     doc.closest = function(target, query){
