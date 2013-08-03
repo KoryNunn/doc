@@ -64,6 +64,9 @@
 
         for(var i = 0; i < classes.length; i++){
             var classToAdd = classes[i];
+            if(!classToAdd || classToAdd === ' '){
+                continue;
+            }
             if(target.classList){
                 target.classList.add(classToAdd);
             } else if(!currentClasses.indexOf(classToAdd)>=0){
