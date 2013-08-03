@@ -87,6 +87,9 @@
 
         for(var i = 0; i < classes.length; i++){
             var classToRemove = classes[i];
+            if(!classToRemove || classToRemove === ' '){
+                continue;
+            }
             if(target.classList){
                 target.classList.remove(classToRemove);
                 continue;
