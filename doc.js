@@ -4,11 +4,13 @@
     } else if (typeof define === 'function' && define.amd) {
         define(factory);
     } else {
-        root.crel = factory();
+        root.doc = factory();
     }
 }(this, function () {
     var doc = {},
-        document = window.document;
+        window = this.window,
+        // Allows instantiation in node for libs that require() it.
+        document = window && window.document;
 
     function isString(thing){
         return typeof thing === 'string';
