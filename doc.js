@@ -61,6 +61,10 @@
     doc.addClass = function(target, classes){
         target = getTarget(target);
 
+        if(!classes){
+            return this;
+        }
+
         var classes = classes.split(' '),
             currentClasses = target.className.split(' ');
 
@@ -83,6 +87,10 @@
 
     doc.removeClass = function(target, classes){
         target = getTarget(target);
+
+        if(!classes){
+            return this;
+        }
 
         var classes = classes.split(' '),
             currentClasses = target.className.split(' ');
