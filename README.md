@@ -40,7 +40,9 @@ Note that the fluent way will build a list of opperations to perform, and won't 
 
 ## Tiny ##
 
-less than 1k minified
+~~less than 1k minified~~
+
+about 1.3k min'd and gzipped (I added features..)
 
 ## Fast ##
 
