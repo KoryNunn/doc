@@ -4,13 +4,15 @@
     } else if (typeof define === 'function' && define.amd) {
         define(factory);
     } else {
-        root.crel = factory();
+        root.doc = factory();
     }
 }(this, function () {
-    var document = window.document,
-        arrayProto = [];
+    var arrayProto = [],
+        window = this.window,
+        // Allows instantiation in node for libs that require() it.
+        document = window && window.document;
 
-    function getTarget(target){        
+    function getTarget(target){
         if(isString(target)){
             return document.querySelector(target);
         }
@@ -18,33 +20,12 @@
         return target;
     }
 
-    function getTargets(target){        
+    function getTargets(target){
         if(isString(target)){
             return document.querySelectorAll(target);
         }
 
         return target;
-    }
-
-    function addFluentFunction(instance, functionName){
-        instance[functionName] = function(){
-            this._query.push({
-                fn: doc[functionName],
-                args: arguments
-            });
-            return this;
-        }
-    }
-
-    function addFluentFunctions(instance){
-
-        // create fluent versions of doc functions.
-        for (var key in doc) {
-            if(doc.hasOwnProperty(key) && typeof doc[key] === 'function'){
-                addFluentFunction(instance, key);
-            }
-        };
-
     }
 
     function doc(target){
@@ -65,10 +46,11 @@
                     }
                 }
 
-                return target;
+                return result;
             };
 
-        addFluentFunctions(instance);
+        instance.__proto__ = doc.prototype;
+
         // custom .on()
         instance.on = function(events, target, callback){
             var proxy = instance._target;
@@ -106,7 +88,7 @@
         return typeof thing === 'string';
     }
 
-    doc.find = function(target, query){
+    function find(target, query){
         if(query == null){
             query = target;
             target = document;
@@ -125,11 +107,11 @@
             }
             return results;
         }
-        
+
         return target ? target.querySelectorAll(query) : [];
     };
 
-    doc.findOne = function(target, query){
+    function findOne(target, query){
         if(query == null){
             query = target;
             target = document;
@@ -150,7 +132,7 @@
         return target ? target.querySelector(query) : null;
     };
 
-    doc.closest = function(target, query){
+    function closest(target, query){
         target = getTarget(target);
 
         if(target && target.length){
@@ -158,8 +140,8 @@
         }
 
         while(
-            target && 
-            target.ownerDocument && 
+            target &&
+            target.ownerDocument &&
             !doc.is(target, query)
         ){
             target = target.parentNode;
@@ -168,7 +150,7 @@
         return target === document && target !== query ? null : target;
     };
 
-    doc.is = function(target, query){
+    function is(target, query){
         target = getTarget(target);
 
         if(target && target.length){
@@ -181,13 +163,15 @@
         return target === query || Array.prototype.slice.call(doc.find(target.parentNode, query)).indexOf(target) >= 0;
     };
 
-    doc.addClass = function(target, classes){
+    function addClass(target, classes){
         target = getTarget(target);
 
         if(target && target.length){
             for (var i = 0; i < target.length; i++) {
                 doc.addClass(target[i], classes);
             }
+        }
+        if(!classes){
             return this;
         }
 
@@ -196,6 +180,9 @@
 
         for(var i = 0; i < classes.length; i++){
             var classToAdd = classes[i];
+            if(!classToAdd || classToAdd === ' '){
+                continue;
+            }
             if(target.classList){
                 target.classList.add(classToAdd);
             } else if(!currentClasses.indexOf(classToAdd)>=0){
@@ -208,13 +195,16 @@
         return this;
     };
 
-    doc.removeClass = function(target, classes){
+    function removeClass(target, classes){
         target = getTarget(target);
 
         if(target && target.length){
             for (var i = 0; i < target.length; i++) {
                 doc.removeClass(target[i], classes);
             }
+        }
+
+        if(!classes){
             return this;
         }
 
@@ -223,6 +213,9 @@
 
         for(var i = 0; i < classes.length; i++){
             var classToRemove = classes[i];
+            if(!classToRemove || classToRemove === ' '){
+                continue;
+            }
             if(target.classList){
                 target.classList.remove(classToRemove);
                 continue;
@@ -242,7 +235,7 @@
         getTarget(settings.target).addEventListener(settings.event, settings.callback, false);
     }
 
-    doc.on = function(events, target, callback, proxy){
+    function on(events, target, callback, proxy){
 
         if(typeof target === 'object' && target.length){
             var multiRemoveCallbacks = [];
@@ -257,7 +250,7 @@
         }
 
         var removeCallbacks = [];
-        
+
         if(typeof events === 'string'){
             events = events.split(' ');
         }
@@ -295,7 +288,8 @@
         }
     };
 
-    doc.off = function(events, target, callback, reference){
+
+    function off(events, target, callback, reference){
         if(target && target.length){
             for (var i = 0; i < target.length; i++) {
                 doc.off(events, target[i], callback, proxy);
@@ -326,7 +320,8 @@
         return this;
     };
 
-    doc.append = function(target, children){
+
+    function append(target, children){
         var target = getTarget(target),
             children = getTarget(children);
 
@@ -345,7 +340,7 @@
         target.appendChild(children);
     };
 
-    doc.isVisible = function(target){
+    function isVisible(target){
         var target = getTarget(target);
         if(!target){
             return;
@@ -363,6 +358,39 @@
 
         return target === document;
     };
+
+    doc.find = find;
+    doc.findOne = findOne;
+    doc.closest = closest;
+    doc.is = is;
+    doc.addClass = addClass;
+    doc.removeClass = removeClass;
+    doc.off = off;
+    doc.on = on;
+    doc.append = append;
+    doc.isVisible = isVisible;
+
+    function addFluentFunction(instance, functionName){
+        instance[functionName] = function(){
+            this._query.push({
+                fn: doc[functionName],
+                args: arguments
+            });
+            return this;
+        }
+    }
+
+    function addFluentFunctions(instance){
+        // create fluent versions of doc functions.
+        for (var key in doc) {
+            if(doc.hasOwnProperty(key) && typeof doc[key] === 'function'){
+                addFluentFunction(instance, key);
+            }
+        };
+
+    }
+
+    addFluentFunctions(doc.prototype);
 
     return doc;
 }));

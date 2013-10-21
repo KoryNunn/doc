@@ -1,22 +1,22 @@
 {
-  "name": "doc-js",
-  "description": "A small, simple, and fast DOM helper library",
-  "author": "Kory Nunn <knunn187@gmail.com>",
-  "tags": [
-    "DOM"
-  ],
-  "version": "0.1.5",
-  "main": "doc.js",
-  "dependencies": {
-    "crel":">=0.0.0"  
-  },
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/KoryNunn/doc.git"
-  },
-  "bugs": {
-    "url": "http://github.com/KoryNunn/doc/issues"
-  },
-  "contributors": []
+    "name": "doc-js",
+    "description": "A small, simple, and fast DOM helper library",
+    "author": "Kory Nunn <knunn187@gmail.com>",
+    "tags": [
+        "DOM"
+    ],
+    "version": "0.1.9",
+    "main": "doc.js",
+    "devDependencies": {
+        "tape":"x.x.x",
+        "crel":"x.x.x"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/KoryNunn/doc.git"
+    },
+    "bugs": {
+        "url": "http://github.com/KoryNunn/doc/issues"
+    },
+    "contributors": []
 }
