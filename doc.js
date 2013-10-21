@@ -191,7 +191,7 @@
         if(!target.ownerDocument || typeof query !== 'string'){
             return target === query;
         }
-        return target === query || Array.prototype.slice.call(doc.find(target.parentNode, query)).indexOf(target) >= 0;
+        return target === query || arrayProto.slice.call(doc.find(target.parentNode, query)).indexOf(target) >= 0;
     };
 
     /**
@@ -221,7 +221,7 @@
         }
 
         var classes = classes.split(' '),
-            currentClasses = target.className.split(' ');
+            currentClasses = target.classList ? null : target.className.split(' ');
 
         for(var i = 0; i < classes.length; i++){
             var classToAdd = classes[i];
@@ -268,7 +268,7 @@
         }
 
         var classes = classes.split(' '),
-            currentClasses = target.className.split(' ');
+            currentClasses = target.classList ? null : target.className.split(' ');
 
         for(var i = 0; i < classes.length; i++){
             var classToRemove = classes[i];
