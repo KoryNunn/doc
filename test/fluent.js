@@ -385,4 +385,48 @@ module.exports = function(test){
 
         t.end();
     });
+
+    test('append', function(t) {
+        var targetElement,
+            button = crel('button');
+
+        crel(document.body,
+            targetElement = crel('div', {'class':'things'})
+        )
+
+        t.plan(1);
+
+        doc('.things').append(button)();
+
+        t.equal(
+            targetElement.firstChild,
+            button,
+            'element appended'
+        );
+
+        t.end();
+    });
+
+    test('prepend', function(t) {
+        var targetElement,
+            button = crel('button');
+
+        crel(document.body,
+            targetElement = crel('div', {'class':'things'},
+                crel('span')
+            )
+        )
+
+        t.plan(1);
+
+        doc('.things').prepend(button)();
+
+        t.equal(
+            targetElement.firstChild,
+            button,
+            'element prepended'
+        );
+
+        t.end();
+    });
 };

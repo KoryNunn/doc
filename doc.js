@@ -28,6 +28,18 @@
         return target;
     }
 
+    /**
+
+        ## addFunction(functionName, docFunction, fluentFunction)
+
+        Used to add functionality to doc. This is needed because of the way doc's fluent functions queue.
+
+            doc.addFunction('myFunc', myFunc, fluentMyFunc);
+
+        the fluentFunction propery only needs to be passed if needed, examples are .on and .off.
+
+    */
+
     function addFunction(functionName, docFunction, fluentFunction){
         doc[functionName] = docFunction;
         doc.prototype[functionName] = fluentFunction || function(){
@@ -38,6 +50,14 @@
             return this;
         }
     }
+
+    /**
+
+        # doc(target)
+
+        think jQuery, but only what's needed.
+
+    */
 
     function doc(target){
         if(!(this instanceof doc)){
@@ -77,6 +97,19 @@
         return typeof thing === 'string';
     }
 
+    /**
+
+        ## find
+
+        finds elements that match the query within the scope of target
+
+            //fluent
+            doc(target).find(query)();
+
+            //legacy
+            doc.find(target, query);
+    */
+
     function find(target, query){
         if(query == null){
             query = target;
@@ -100,6 +133,19 @@
         return target ? target.querySelectorAll(query) : [];
     };
 
+    /**
+
+        ## findOne
+
+        finds the first element that matches the query within the scope of target
+
+            //fluent
+            doc(target).findOne(query)();
+
+            //legacy
+            doc.findOne(target, query);
+    */
+
     function findOne(target, query){
         if(query == null){
             query = target;
@@ -121,6 +167,19 @@
         return target ? target.querySelector(query) : null;
     };
 
+    /**
+
+        ## closest
+
+        recurses up the DOM from the target node, checking if the current element matches the query
+
+            //fluent
+            doc(target).closest(query)();
+
+            //legacy
+            doc.closest(target, query);
+    */
+
     function closest(target, query){
         target = getTarget(target);
 
@@ -139,6 +198,19 @@
         return target === document && target !== query ? null : target;
     };
 
+    /**
+
+        ## is
+
+        returns true if the target element matches the query
+
+            //fluent
+            doc(target).is(query)();
+
+            //legacy
+            doc.is(target, query);
+    */
+
     function is(target, query){
         target = getTarget(target);
 
@@ -151,6 +223,19 @@
         }
         return target === query || Array.prototype.slice.call(doc.find(target.parentNode, query)).indexOf(target) >= 0;
     };
+
+    /**
+
+        ## addClass
+
+        adds classes to the target
+
+            //fluent
+            doc(target).addClass(query)();
+
+            //legacy
+            doc.addClass(target, query);
+    */
 
     function addClass(target, classes){
         target = getTarget(target);
@@ -184,6 +269,19 @@
         }
         return this;
     };
+
+    /**
+
+        ## removeClass
+
+        removes classes from the target
+
+            //fluent
+            doc(target).removeClass(query)();
+
+            //legacy
+            doc.removeClass(target, query);
+    */
 
     function removeClass(target, classes){
         target = getTarget(target);
@@ -230,6 +328,21 @@
             console.warn('No elements matched the selector, so no events were bound.');
         }
     }
+
+    /**
+
+        ## on
+
+        binds a callback to a target when a DOM event is raised.
+
+            //fluent
+            doc(target/proxy).on(events, target[optional], callback)();
+
+        note: if a target is passed to the .on function, doc's target will be used as the proxy.
+
+            //legacy
+            doc.on(events, target, query, proxy[optional]);
+    */
 
     function on(events, target, callback, proxy){
 
@@ -284,8 +397,22 @@
         }
     };
 
+    /**
 
-    function off(events, target, callback, reference){
+        ## off
+
+        removes events assigned to a target.
+
+            //fluent
+            doc(target/proxy).off(events, target[optional], callback)();
+
+        note: if a target is passed to the .on function, doc's target will be used as the proxy.
+
+            //legacy
+            doc.off(events, target, callback, proxy);
+    */
+
+    function off(events, target, callback, proxy){
         if(target && target.length){
             for (var i = 0; i < target.length; i++) {
                 doc.off(events, target[i], callback, proxy);
@@ -298,13 +425,13 @@
         }
 
         if(typeof callback !== 'function'){
-            reference = callback;
+            proxy = callback;
             callback = null;
         }
 
-        reference = reference ? getTarget(reference) : document;
+        proxy = proxy ? getTarget(proxy) : document;
 
-        var targets = find(target, reference);
+        var targets = find(target, proxy);
 
         for(var targetIndex = 0; targetIndex < targets.length; targetIndex++){
             var currentTarget = targets[targetIndex];
@@ -316,6 +443,18 @@
         return this;
     };
 
+    /**
+
+        ## append
+
+        adds elements to a target
+
+            //fluent
+            doc(target).append(children);
+
+            //legacy
+            doc.append(target, children);
+    */
 
     function append(target, children){
         var target = getTarget(target),
@@ -335,6 +474,53 @@
 
         target.appendChild(children);
     };
+
+    /**
+
+        ## prepend
+
+        adds elements to the front of a target
+
+            //fluent
+            doc(target).prepend(children);
+
+            //legacy
+            doc.prepend(target, children);
+    */
+
+    function prepend(target, children){
+        var target = getTarget(target),
+            children = getTarget(children);
+
+        if(target && target.length){
+            target = target[0];
+        }
+
+        if(children.length){
+            children = arrayProto.slice.call(children);
+
+            //reversed because otherwise the would get put in in the wrong order.
+            for (var i = children.length -1; i; i--) {
+                doc.prepend(target, children[i]);
+            }
+            return;
+        }
+
+        target.insertBefore(children, target.firstChild);
+    };
+
+    /**
+
+        ## isVisible
+
+        checks if an element or any of its parents display properties are set to 'none'
+
+            //fluent
+            doc(target).isVisible();
+
+            //legacy
+            doc.isVisible(target);
+    */
 
     function isVisible(target){
         var target = getTarget(target);
@@ -364,6 +550,7 @@
     doc.off = off;
     doc.on = on;
     doc.append = append;
+    doc.prepend = prepend;
     doc.isVisible = isVisible;
 
     function addFluentFunctions(){
