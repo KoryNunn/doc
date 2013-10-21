@@ -144,447 +144,260 @@ test('isnt..', function(t) {
 
     t.equal(
         doc('.things').is('.notThis')(),
-        true,
+        false,
         '.things is not .notThis'
     );
     t.end();
 });
 
-        {
-            name: "closest with node",
-            test: function(){
-                testArea.appendChild(crel('div', {'class':'things'}));
-
-                var result = doc.closest(doc.find('.things')[0], testArea);
-
-                this.result = result;
-            },
-            expected: testArea
-        },
-        {
-            name: "closest with query",
-            test: function(){
-                testArea.appendChild(crel('div', {'class':'things'}));
-
-                var result = doc.closest(doc.find('.things')[0], '.testArea');
-
-                this.result = result;
-            },
-            expected: testArea
-        },
-        {
-            name: "closest document",
-            test: function(){
-                var result = doc.closest(document, document);
-
-                this.result = result;
-            },
-            expected: document
-        },
-        {
-            name: "on click",
-            test: function(){
-                var test = this;
-
-                testArea.appendChild(crel('div', {'class':'things'}));
-
-                var result = doc.on('click', '.things', function(){
-                    test.result = true;
-                });
-
-                doc.find('.things')[0].click();
-            },
-            expected: true
-        },
-        {
-            name: "'off' on click",
-            test: function(){
-                var test = this;
-
-                testArea.appendChild(crel('div', {'class':'things'}));
-
-                var off = doc.on('click', '.things', function(){
-                    test.result++;
-                });
-
-                doc.find('.things')[0].click();
-
-                off();
-
-                doc.find('.things')[0].click();
-
-            },
-            expected: 1,
-            result: 0
-        },
-        {
-            name: "on click delegated",
-            test: function(){
-                var test = this;
-
-                testArea.appendChild(
-                    crel('div',
-                        crel('div', {'class':'delegate'},
-                            crel('div', {'class':'thing'})
-                        ),
-                        crel('div', {'class':'thing'})
-                    )
-                );
-
-                this.result = 0;
-
-                var result = doc.on('click', '.thing', function(){
-                    test.result++;
-                }, '.delegate');
-
-                doc.find('.thing')[0].click();
-                doc.find('.thing')[1].click();
-            },
-            expected: 1
-        },
-        {
-            name: "add class",
-            test: function(){
-                var test = this;
-
-                var testItem = crel('div');
-
-                testArea.appendChild(
-                    testItem
-                );
-
-                doc.addClass(testItem, 'hello');
-
-                this.result = doc.is(testItem, '.hello');
-            },
-            expected: true
-        },
-        {
-            name: "add classes",
-            test: function(){
-                var test = this;
-
-                var testItem = crel('div');
-
-                testArea.appendChild(
-                    testItem
-                );
-
-                doc.addClass(testItem, 'hello world');
-
-                this.result = doc.is(testItem, '.hello') && doc.is(testItem, '.world');
-            },
-            expected: true
-        },
-        {
-            name: "add extra classes",
-            test: function(){
-                var test = this;
-
-                var testItem = crel('div', {'class':'hello'});
-
-                testArea.appendChild(
-                    testItem
-                );
-
-                doc.addClass(testItem, 'world');
-
-                this.result = doc.is(testItem, '.hello') && doc.is(testItem, '.world');
-            },
-            expected: true
-        },
-        {
-            name: "remove class",
-            test: function(){
-                var test = this;
-
-                var testItem = crel('div', {'class':'hello'});
-
-                testArea.appendChild(
-                    testItem
-                );
-
-                doc.removeClass(testItem, 'hello');
-
-                this.result = doc.is(testItem, '.hello');
-            },
-            expected: false
-        },
-        {
-            name: "remove classes",
-            test: function(){
-                var test = this;
-
-                var testItem = crel('div', {'class':'hello world'});
-
-                testArea.appendChild(
-                    testItem
-                );
-
-                doc.removeClass(testItem, 'hello').removeClass(testItem, 'world');
-
-                this.result = doc.is(testItem, '.hello') || doc.is(testItem, '.world');
-            },
-            expected: false
-        },
-        {
-            name: "remove some classes",
-            test: function(){
-                var test = this;
-
-                var testItem = crel('div', {'class':'hello world majigger'});
-
-                testArea.appendChild(
-                    testItem
-                );
-
-                doc.removeClass(testItem, 'hello').removeClass(testItem, 'world');
-
-                this.result = doc.is(testItem, '.majigger') && !(doc.is(testItem, '.hello') || doc.is(testItem, '.world'));
-            },
-            expected: true
-        },
-        // fluent
-        {
-            name: "find",
-            test: function(){
-                testArea.appendChild(crel('div', {'class':'things'}));
-
-                var result = doc('.things')();
-
-                this.result = result.length;
-            },
-            expected: 1
-        },
-        {
-            name: "find with query reference",
-            test: function(){
-                testArea.appendChild(crel('div', {'class':'things'}));
-
-                var result = doc('.testArea .things')();
-
-                this.result = result.length;
-            },
-            expected: 1
-        },
-        {
-            name: "find with node reference",
-            test: function(){
-                testArea.appendChild(crel('div', {'class':'things'}));
-
-                var result = doc(testArea).find('.things')();
-
-                this.result = result.length;
-            },
-            expected: 1
-        },
-        {
-            name: "is",
-            test: function(){
-
-                this.result = doc(testArea).is('.testArea')();
-            },
-            expected: true
-        },
-        {
-            name: "isnt..",
-            test: function(){
-
-                this.result = doc(testArea).is('.something')();
-            },
-            expected: false
-        },
-        {
-            name: "closest with node",
-            test: function(){
-                testArea.appendChild(crel('div', {'class':'things'}));
-
-                var result = doc(doc.find('.things')[0]).closest(testArea)();
-
-                this.result = result;
-            },
-            expected: testArea
-        },
-        {
-            name: "closest with query",
-            test: function(){
-                testArea.appendChild(crel('div', {'class':'things'}));
-
-                var result = doc('.things').closest('.testArea')();
-
-                this.result = result;
-            },
-            expected: testArea
-        },
-        {
-            name: "closest document",
-            test: function(){
-                var result = doc.closest(document, document);
-
-                this.result = result;
-            },
-            expected: document
-        },
-        {
-            name: "on click",
-            test: function(){
-                var test = this;
-
-                testArea.appendChild(crel('div', {'class':'things'}));
-
-                var result = doc.on('click', '.things', function(){
-                    test.result = true;
-                });
-
-                doc.find('.things')[0].click();
-            },
-            expected: true
-        },
-        {
-            name: "'off' on click",
-            test: function(){
-                var test = this;
-
-                testArea.appendChild(crel('div', {'class':'things'}));
-
-                var off = doc.on('click', '.things', function(){
-                    test.result++;
-                });
-
-                doc.find('.things')[0].click();
-
-                off();
-
-                doc.find('.things')[0].click();
-
-            },
-            expected: 1,
-            result: 0
-        },
-        {
-            name: "on click delegated",
-            test: function(){
-                var test = this;
-
-                testArea.appendChild(
-                    crel('div',
-                        crel('div', {'class':'delegate'},
-                            crel('div', {'class':'thing'})
-                        ),
-                        crel('div', {'class':'thing'})
-                    )
-                );
-
-                this.result = 0;
-
-                var result = doc.on('click', '.thing', function(){
-                    test.result++;
-                }, '.delegate');
-
-                doc.find('.thing')[0].click();
-                doc.find('.thing')[1].click();
-            },
-            expected: 1
-        },
-        {
-            name: "add class",
-            test: function(){
-                var test = this;
-
-                var testItem = crel('div');
-
-                testArea.appendChild(
-                    testItem
-                );
-
-                doc.addClass(testItem, 'hello');
-
-                this.result = doc.is(testItem, '.hello');
-            },
-            expected: true
-        },
-        {
-            name: "add classes",
-            test: function(){
-                var test = this;
-
-                var testItem = crel('div');
-
-                testArea.appendChild(
-                    testItem
-                );
-
-                doc.addClass(testItem, 'hello world');
-
-                this.result = doc.is(testItem, '.hello') && doc.is(testItem, '.world');
-            },
-            expected: true
-        },
-        {
-            name: "add extra classes",
-            test: function(){
-                var test = this;
-
-                var testItem = crel('div', {'class':'hello'});
-
-                testArea.appendChild(
-                    testItem
-                );
-
-                doc.addClass(testItem, 'world');
-
-                this.result = doc.is(testItem, '.hello') && doc.is(testItem, '.world');
-            },
-            expected: true
-        },
-        {
-            name: "remove class",
-            test: function(){
-                var test = this;
-
-                var testItem = crel('div', {'class':'hello'});
-
-                testArea.appendChild(
-                    testItem
-                );
-
-                doc.removeClass(testItem, 'hello');
-
-                this.result = doc.is(testItem, '.hello');
-            },
-            expected: false
-        },
-        {
-            name: "remove classes",
-            test: function(){
-                var test = this;
-
-                var testItem = crel('div', {'class':'hello world'});
-
-                testArea.appendChild(
-                    testItem
-                );
-
-                doc.removeClass(testItem, 'hello').removeClass(testItem, 'world');
-
-                this.result = doc.is(testItem, '.hello') || doc.is(testItem, '.world');
-            },
-            expected: false
-        },
-        {
-            name: "remove some classes",
-            test: function(){
-                var test = this;
-
-                var testItem = crel('div', {'class':'hello world majigger'});
-
-                testArea.appendChild(
-                    testItem
-                );
-
-                doc.removeClass(testItem, 'hello').removeClass(testItem, 'world');
-
-                this.result = doc.is(testItem, '.majigger') && !(doc.is(testItem, '.hello') || doc.is(testItem, '.world'));
-            },
-            expected: true
+test('closest', function(t) {
+    crel(document.body,
+        crel('div', {'class':'things'},
+            crel('div', {'class':'stuff'})
+        )
+    )
+
+    t.plan(1);
+
+    var result = doc('.stuff').closest('.things')();
+
+    t.equal(
+        result.className,
+        'things',
+        'found closest stuff to things'
+    );
+    t.end();
+});
+
+test('closest via node', function(t) {
+    crel(document.body,
+        crel('div', {'class':'things'},
+            crel('div', {'class':'stuff'})
+        )
+    )
+
+    t.plan(1);
+
+    var result = doc(document.querySelector('.stuff')).closest('.things')();
+
+    t.equal(
+        result.className,
+        'things',
+        'found closest stuff to things'
+    );
+    t.end();
+});
+
+test('closest document', function(t) {
+    crel(document.body,
+        crel('div', {'class':'things'},
+            crel('div', {'class':'stuff'})
+        )
+    )
+
+    t.plan(1);
+
+    var result = doc(document).closest(document)();
+
+    t.equal(
+        result,
+        document,
+        'found closest document'
+    );
+    t.end();
+});
+
+test('on click', function(t) {
+    var targetElement;
+
+    crel(document.body,
+        targetElement = crel('div', {'class':'things'},
+            crel('div', {'class':'stuff'})
+        )
+    )
+
+    t.plan(1);
+
+    doc('.things').on('click', function(){
+        t.pass('recieved click event');
+    });
+
+    targetElement.click();
+
+    t.end();
+});
+
+test('on click null target', function(t) {
+    var targetElement;
+
+    crel(document.body,
+        targetElement = crel('div', {'class':'things'},
+            crel('div', {'class':'stuff'})
+        )
+    )
+
+    t.plan(1);
+
+    doc('nothing').on('click', function(){
+        t.fail('recieved click event');
+    });
+
+    targetElement.click();
+
+    t.pass('no click heard');
+
+    t.end();
+});
+
+test('off click', function(t) {
+    var targetElement;
+
+    crel(document.body,
+        targetElement = crel('div', {'class':'things'},
+            crel('div', {'class':'stuff'})
+        )
+    )
+
+    t.plan(2);
+
+    var callback = function(){
+        t.pass('recieved click event');
+    };
+
+    doc('.things').on('click', callback);
+
+    targetElement.click();
+
+    doc('.things').off(callback);
+
+    t.pass('no click heard');
+
+    t.end();
+});
+
+test('on click delegated', function(t) {
+    var delegateElement,
+        targetElement;
+
+    crel(document.body,
+        delegateElement = crel('div', {'class':'things'},
+            targetElement = crel('div', {'class':'stuff'})
+        )
+    )
+
+    t.plan(1);
+
+    doc('.things').on('click', '.stuff', function(event){
+        if(event.target === targetElement){
+            t.pass('recieved click event');
+        }else{
+            t.fail('wrong target');
         }
+    });
+
+    targetElement.click();
+
+    delegateElement.click();
+
+    t.end();
+});
+
+test('add class', function(t) {
+    var targetElement;
+
+    crel(document.body,
+        targetElement = crel('div', {'class':'things'})
+    )
+
+    t.plan(1);
+
+    doc('.things').addClass('stuff')();
+
+    t.equal(
+        targetElement.className,
+        'things stuff',
+        'target had new class'
+    );
+
+    t.end();
+});
+
+test('add classes', function(t) {
+    var targetElement;
+
+    crel(document.body,
+        targetElement = crel('div', {'class':'things'})
+    )
+
+    t.plan(1);
+
+    doc('.things').addClass('stuff majigger')();
+
+    t.equal(
+        targetElement.className,
+        'things stuff majigger',
+        'target had new classes'
+    );
+
+    t.end();
+});
+
+test('add dupliacte class', function(t) {
+    var targetElement;
+
+    crel(document.body,
+        targetElement = crel('div', {'class':'things'})
+    )
+
+    t.plan(1);
+
+    doc('.things').addClass('stuff things')();
+
+    t.equal(
+        targetElement.className,
+        'things stuff',
+        'target had only new classes added'
+    );
+
+    t.end();
+});
+
+test('remove class', function(t) {
+    var targetElement;
+
+    crel(document.body,
+        targetElement = crel('div', {'class':'things stuff'})
+    )
+
+    t.plan(1);
+
+    doc('.things').removeClass('things')();
+
+    t.equal(
+        targetElement.className,
+        'stuff',
+        'target had class removed'
+    );
+
+    t.end();
+});
+
+test('remove classes', function(t) {
+    var targetElement;
+
+    crel(document.body,
+        targetElement = crel('div', {'class':'things stuff'})
+    )
+
+    t.plan(1);
+
+    doc('.things').removeClass('things stuff')();
+
+    t.equal(
+        targetElement.className,
+        '',
+        'target had classes removed'
+    );
+
+    t.end();
+});

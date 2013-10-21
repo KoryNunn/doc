@@ -28,6 +28,17 @@
         return target;
     }
 
+    function addFunction(functionName, docFunction, fluentFunction){
+        doc[functionName] = docFunction;
+        doc.prototype[functionName] = fluentFunction || function(){
+            this._query.push({
+                fn: docFunction,
+                args: arguments
+            });
+            return this;
+        }
+    }
+
     function doc(target){
         if(!(this instanceof doc)){
             return new doc(target);
@@ -51,29 +62,6 @@
 
         instance.__proto__ = doc.prototype;
 
-        // custom .on()
-        instance.on = function(events, target, callback){
-            var proxy = instance._target;
-            if(typeof target === 'function'){
-                callback = target;
-                target = instance._target;
-                proxy = null;
-            }
-            doc.on(events, target, callback, proxy);
-            return instance;
-        }
-        // custom .off()
-        instance.off = function(events, target, callback){
-            var reference = instance._target;
-            if(typeof target === 'function'){
-                callback = target;
-                target = instance._target;
-                reference = null;
-            }
-            doc.off(events, target, callback, reference);
-            return instance;
-        }
-
         instance.items = function(){
             return doc(instance._target)();
         };
@@ -83,6 +71,7 @@
 
         return instance;
     }
+    doc.addFunction = addFunction;
 
     function isString(thing){
         return typeof thing === 'string';
@@ -170,6 +159,7 @@
             for (var i = 0; i < target.length; i++) {
                 doc.addClass(target[i], classes);
             }
+            return this;
         }
         if(!classes){
             return this;
@@ -202,6 +192,7 @@
             for (var i = 0; i < target.length; i++) {
                 doc.removeClass(target[i], classes);
             }
+            return this;
         }
 
         if(!classes){
@@ -232,7 +223,12 @@
     };
 
     function addEvent(settings){
-        getTarget(settings.target).addEventListener(settings.event, settings.callback, false);
+        var target = getTarget(settings.target);
+        if(target){
+            target.addEventListener(settings.event, settings.callback, false);
+        }else{
+            console.warn('No elements matched the selector, so no events were bound.');
+        }
     }
 
     function on(events, target, callback, proxy){
@@ -370,27 +366,39 @@
     doc.append = append;
     doc.isVisible = isVisible;
 
-    function addFluentFunction(instance, functionName){
-        instance[functionName] = function(){
-            this._query.push({
-                fn: doc[functionName],
-                args: arguments
-            });
-            return this;
-        }
-    }
-
-    function addFluentFunctions(instance){
+    function addFluentFunctions(){
         // create fluent versions of doc functions.
         for (var key in doc) {
             if(doc.hasOwnProperty(key) && typeof doc[key] === 'function'){
-                addFluentFunction(instance, key);
+                addFunction(key, doc[key]);
             }
         };
 
     }
 
-    addFluentFunctions(doc.prototype);
+    addFluentFunctions();
+
+    addFunction('on', on, function(events, target, callback){
+        var proxy = this._target;
+        if(typeof target === 'function'){
+            callback = target;
+            target = this._target;
+            proxy = null;
+        }
+        doc.on(events, target, callback, proxy);
+        return this;
+    });
+
+    addFunction('off', on, function(events, target, callback){
+        var reference = this._target;
+        if(typeof target === 'function'){
+            callback = target;
+            target = this._target;
+            reference = null;
+        }
+        doc.off(events, target, callback, reference);
+        return this;
+    });
 
     return doc;
 }));
