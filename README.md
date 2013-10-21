@@ -1,5 +1,4 @@
-doc
-====
+# doc
 
 # What #
 
@@ -11,22 +10,30 @@ A few commonly used dom traverstal and event binding techniques are not easy to 
 
 # Usage #
 
-Find the 'closest' parent element to a target element:
+    var doc = require('doc-js');
 
-	doc.closest(targetNode, parentNode/selector);
+    doc('.things'); // NodeList
 
-Check if an element matches a selector:
 
-	doc.is(target, selector);
+There are two versions of every function; a legacy way, and a fluent way.
 
-Add an event listener to an element:
+Legacy way example:
 
-	doc.on('click', selector/element, callback);
+    doc.is(target, selector);
 
-Delegate an event listener to a parent element:
+Fluent way example:
 
-	doc.on('click', selector/element, callback, parentNode/parentSelector);
-    
+    doc(target).is(selector)();
+
+Note that the fluent way will build a list of opperations to perform, and won't execute them untill you call the returned function:
+
+    var thingsToDo = doc(target).addClass('things').is('.things');
+
+    // nothing touched yet...
+
+    // execute the opperations.
+    thingsToDo();
+
 # Goals #
 
 ## Easy to use ##

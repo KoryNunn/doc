@@ -28,36 +28,7 @@
         return target;
     }
 
-    /**
-
-        ## addFunction(functionName, docFunction, fluentFunction)
-
-        Used to add functionality to doc. This is needed because of the way doc's fluent functions queue.
-
-            doc.addFunction('myFunc', myFunc, fluentMyFunc);
-
-        the fluentFunction propery only needs to be passed if needed, examples are .on and .off.
-
-    */
-
-    function addFunction(functionName, docFunction, fluentFunction){
-        doc[functionName] = docFunction;
-        doc.prototype[functionName] = fluentFunction || function(){
-            this._query.push({
-                fn: docFunction,
-                args: arguments
-            });
-            return this;
-        }
-    }
-
-    /**
-
-        # doc(target)
-
-        think jQuery, but only what's needed.
-
-    */
+///[README.md]
 
     function doc(target){
         if(!(this instanceof doc)){
@@ -91,7 +62,6 @@
 
         return instance;
     }
-    doc.addFunction = addFunction;
 
     function isString(thing){
         return typeof thing === 'string';
@@ -99,7 +69,7 @@
 
     /**
 
-        ## find
+        ## .find
 
         finds elements that match the query within the scope of target
 
@@ -135,7 +105,7 @@
 
     /**
 
-        ## findOne
+        ## .findOne
 
         finds the first element that matches the query within the scope of target
 
@@ -169,7 +139,7 @@
 
     /**
 
-        ## closest
+        ## .closest
 
         recurses up the DOM from the target node, checking if the current element matches the query
 
@@ -200,7 +170,7 @@
 
     /**
 
-        ## is
+        ## .is
 
         returns true if the target element matches the query
 
@@ -226,7 +196,7 @@
 
     /**
 
-        ## addClass
+        ## .addClass
 
         adds classes to the target
 
@@ -272,7 +242,7 @@
 
     /**
 
-        ## removeClass
+        ## .removeClass
 
         removes classes from the target
 
@@ -331,7 +301,7 @@
 
     /**
 
-        ## on
+        ## .on
 
         binds a callback to a target when a DOM event is raised.
 
@@ -399,7 +369,7 @@
 
     /**
 
-        ## off
+        ## .off
 
         removes events assigned to a target.
 
@@ -445,7 +415,7 @@
 
     /**
 
-        ## append
+        ## .append
 
         adds elements to a target
 
@@ -477,7 +447,7 @@
 
     /**
 
-        ## prepend
+        ## .prepend
 
         adds elements to the front of a target
 
@@ -511,7 +481,7 @@
 
     /**
 
-        ## isVisible
+        ## .isVisible
 
         checks if an element or any of its parents display properties are set to 'none'
 
@@ -552,6 +522,30 @@
     doc.append = append;
     doc.prepend = prepend;
     doc.isVisible = isVisible;
+
+    /**
+
+        ## .addFunction
+
+        Used to add functionality to doc. This is needed because of the way doc's fluent functions queue.
+
+            doc.addFunction('myFunc', myFunc, fluentMyFunc);
+
+        the fluentFunction propery only needs to be passed if needed, examples are .on and .off.
+
+    */
+
+    function addFunction(functionName, docFunction, fluentFunction){
+        doc[functionName] = docFunction;
+        doc.prototype[functionName] = fluentFunction || function(){
+            this._query.push({
+                fn: docFunction,
+                args: arguments
+            });
+            return this;
+        }
+    }
+    doc.addFunction = addFunction;
 
     function addFluentFunctions(){
         // create fluent versions of doc functions.
