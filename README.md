@@ -10,9 +10,15 @@ A few commonly used dom traverstal and event binding techniques are not easy to 
 
 # Usage #
 
+doc can be used very much like jQuery:
+
     var doc = require('doc-js');
 
-    doc('.things'); // NodeList
+    doc(target); // NodeList
+
+where 'target' can be a CSS selector, a HTMLElement, or a list of elements, eg:
+
+    doc('.things'); // List of nodes that have the class 'things'
 
 
 There are two versions of every function; a legacy way, and a fluent way.
