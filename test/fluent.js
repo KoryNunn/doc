@@ -1,4 +1,4 @@
-var doc = require('../'),
+var doc = require('../fluent'),
     crel = require('crel');
 
 module.exports = function(test){
@@ -13,7 +13,7 @@ module.exports = function(test){
         t.plan(1);
 
         t.equal(
-            doc('span')().length,
+            doc('span').length,
             3,
             'found 3 spans'
         );
@@ -32,7 +32,7 @@ module.exports = function(test){
         t.plan(1);
 
         t.equal(
-            doc('span')().length,
+            doc('span').length,
             3,
             'found 3 spans'
         );
@@ -51,7 +51,7 @@ module.exports = function(test){
         t.plan(1);
 
         t.equal(
-            doc('span').find('span')().length,
+            doc('span').find('span').length,
             2,
             'found 2 nested spans'
         );
@@ -67,7 +67,7 @@ module.exports = function(test){
         t.plan(1);
 
         t.equal(
-            doc('.things')().length,
+            doc('.things').length,
             1,
             'found 1 .things'
         );
@@ -82,7 +82,7 @@ module.exports = function(test){
         t.plan(1);
 
         t.equal(
-            doc('body').find('.things')().length,
+            doc('body').find('.things').length,
             1,
             'found 1 .things'
         );
@@ -97,7 +97,7 @@ module.exports = function(test){
         t.plan(1);
 
         t.equal(
-            doc(document.body).find('.things')().length,
+            doc(document.body).find('.things').length,
             1,
             'found 1 .things'
         );
@@ -112,7 +112,7 @@ module.exports = function(test){
         t.plan(1);
 
         t.equal(
-            doc('.things').is('.things')(),
+            doc('.things').is('.things'),
             true,
             '.things is .things'
         );
@@ -127,7 +127,7 @@ module.exports = function(test){
         t.plan(1);
 
         t.equal(
-            doc('.things').is('.notThis')(),
+            doc('.things').is('.notThis'),
             false,
             '.things is not .notThis'
         );
@@ -143,7 +143,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        var result = doc('.stuff').closest('.things')();
+        var result = doc('.stuff').closest('.things');
 
         t.equal(
             result.className,
@@ -162,7 +162,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        var result = doc(document.querySelector('.stuff')).closest('.things')();
+        var result = doc(document.querySelector('.stuff')).closest('.things');
 
         t.equal(
             result.className,
@@ -181,7 +181,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        var result = doc(document).closest(document)();
+        var result = doc(document).closest(document);
 
         t.equal(
             result,
@@ -295,7 +295,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        doc('.things').addClass('stuff')();
+        doc('.things').addClass('stuff');
 
         t.equal(
             targetElement.className,
@@ -315,7 +315,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        doc('.things').addClass('stuff majigger')();
+        doc('.things').addClass('stuff majigger');
 
         t.equal(
             targetElement.className,
@@ -335,7 +335,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        doc('.things').addClass('stuff things')();
+        doc('.things').addClass('stuff things');
 
         t.equal(
             targetElement.className,
@@ -355,7 +355,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        doc('.things').removeClass('things')();
+        doc('.things').removeClass('things');
 
         t.equal(
             targetElement.className,
@@ -375,7 +375,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        doc('.things').removeClass('things stuff')();
+        doc('.things').removeClass('things stuff');
 
         t.equal(
             targetElement.className,
@@ -396,7 +396,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        doc('.things').append(button)();
+        doc('.things').append(button);
 
         t.equal(
             targetElement.firstChild,
@@ -419,7 +419,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        doc('.things').prepend(button)();
+        doc('.things').prepend(button);
 
         t.equal(
             targetElement.firstChild,

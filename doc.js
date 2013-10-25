@@ -20,50 +20,8 @@
         return target;
     }
 
-    function getTargets(target){
-        if(isString(target)){
-            return document.querySelectorAll(target);
-        }
-
-        return target;
-    }
-
 ///[README.md]
 
-    function doc(target){
-        if(!(this instanceof doc)){
-            return new doc(target);
-        }
-
-        var instance = function(){
-                var target = getTargets(instance._target) || document,
-                    result = target,
-                    queryIndex = 0;
-
-                for(var i = 0; i < instance._query.length; i++) {
-                    var step = instance._query[i];
-                    // SHHHSH shhh shhhh shhhhhhh.......
-                    // Perf.....
-                    result = step.fn.call(instance, target, step.args[0], step.args[1], step.args[2], step.args[3]);
-                    if(result !== instance){
-                        instance._target = result;
-                    }
-                }
-
-                return result;
-            };
-
-        instance.__proto__ = doc.prototype;
-
-        instance.items = function(){
-            return doc(instance._target)();
-        };
-
-        instance._target = target;
-        instance._query = [];
-
-        return instance;
-    }
 
     function isString(thing){
         return typeof thing === 'string';
@@ -89,7 +47,7 @@
         }
         target = getTarget(target);
 
-        if(target && target.length){
+        if(target && target instanceof Array){
             var results = [];
             for (var i = 0; i < target.length; i++) {
                 results = results.concat(arrayProto.slice.call(doc.find(target[i], query)));
@@ -125,7 +83,7 @@
         }
         target = getTarget(target);
 
-        if(target && target.length){
+        if(target && target instanceof Array){
             var result;
             for (var i = 0; i < target.length; i++) {
                 result = doc.findOne(target[i], query);
@@ -155,7 +113,7 @@
     function closest(target, query){
         target = getTarget(target);
 
-        if(target && target.length){
+        if(target && target instanceof Array){
             target = target[0];
         }
 
@@ -186,7 +144,7 @@
     function is(target, query){
         target = getTarget(target);
 
-        if(target && target.length){
+        if(target && target instanceof Array){
             target = target[0];
         }
 
@@ -212,7 +170,7 @@
     function addClass(target, classes){
         target = getTarget(target);
 
-        if(target && target.length){
+        if(target && target instanceof Array){
             for (var i = 0; i < target.length; i++) {
                 doc.addClass(target[i], classes);
             }
@@ -258,7 +216,7 @@
     function removeClass(target, classes){
         target = getTarget(target);
 
-        if(target && target.length){
+        if(target && target instanceof Array){
             for (var i = 0; i < target.length; i++) {
                 doc.removeClass(target[i], classes);
             }
@@ -385,7 +343,7 @@
     */
 
     function off(events, target, callback, proxy){
-        if(target && target.length){
+        if(target && target instanceof Array){
             for (var i = 0; i < target.length; i++) {
                 doc.off(events, target[i], callback, proxy);
             }
@@ -432,7 +390,7 @@
         var target = getTarget(target),
             children = getTarget(children);
 
-        if(target && target.length){
+        if(target && target instanceof Array){
             target = target[0];
         }
 
@@ -464,7 +422,7 @@
         var target = getTarget(target),
             children = getTarget(children);
 
-        if(target && target.length){
+        if(target && target instanceof Array){
             target = target[0];
         }
 
@@ -513,6 +471,7 @@
         return target === document;
     };
 
+    var doc = {};
     doc.find = find;
     doc.findOne = findOne;
     doc.closest = closest;
@@ -524,64 +483,6 @@
     doc.append = append;
     doc.prepend = prepend;
     doc.isVisible = isVisible;
-
-    /**
-
-        ## .addFunction
-
-        Used to add functionality to doc. This is needed because of the way doc's fluent functions queue.
-
-            doc.addFunction('myFunc', myFunc, fluentMyFunc);
-
-        the fluentFunction propery only needs to be passed if needed, examples are .on and .off.
-
-    */
-
-    function addFunction(functionName, docFunction, fluentFunction){
-        doc[functionName] = docFunction;
-        doc.prototype[functionName] = fluentFunction || function(){
-            this._query.push({
-                fn: docFunction,
-                args: arguments
-            });
-            return this;
-        }
-    }
-    doc.addFunction = addFunction;
-
-    function addFluentFunctions(){
-        // create fluent versions of doc functions.
-        for (var key in doc) {
-            if(doc.hasOwnProperty(key) && typeof doc[key] === 'function'){
-                addFunction(key, doc[key]);
-            }
-        };
-
-    }
-
-    addFluentFunctions();
-
-    addFunction('on', on, function(events, target, callback){
-        var proxy = this._target;
-        if(typeof target === 'function'){
-            callback = target;
-            target = this._target;
-            proxy = null;
-        }
-        doc.on(events, target, callback, proxy);
-        return this;
-    });
-
-    addFunction('off', on, function(events, target, callback){
-        var reference = this._target;
-        if(typeof target === 'function'){
-            callback = target;
-            target = this._target;
-            reference = null;
-        }
-        doc.off(events, target, callback, reference);
-        return this;
-    });
 
     return doc;
 }));
