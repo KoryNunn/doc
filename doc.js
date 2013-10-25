@@ -36,13 +36,15 @@
         }
 
         var instance = function(){
-                var target = isString(instance._target) ? doc.find(instance._target) : instance._target || document,
-                    result = target;
+                var target = getTargets(instance._target) || document,
+                    result = target,
+                    queryIndex = 0;
 
-                while (instance._query.length) {
-                    var step = instance._query.shift();
-
-                    result = step.fn.apply(instance, [target].concat(arrayProto.slice.call(step.args)));
+                for(var i = 0; i < instance._query.length; i++) {
+                    var step = instance._query[i];
+                    // SHHHSH shhh shhhh shhhhhhh.......
+                    // Perf.....
+                    result = step.fn.call(instance, target, step.args[0], step.args[1], step.args[2], step.args[3]);
                     if(result !== instance){
                         instance._target = result;
                     }
