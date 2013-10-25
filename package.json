@@ -5,7 +5,7 @@
   "tags": [
     "DOM"
   ],
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "doc.js",
   "devDependencies": {
     "tape": "x.x.x",
