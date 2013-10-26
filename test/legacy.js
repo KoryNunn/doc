@@ -248,11 +248,11 @@ module.exports = function(test){
             t.pass('recieved click event');
         };
 
-        doc.on('click', '.things', callback);
+        var off = doc.on('click', '.things', callback);
 
         targetElement.click();
 
-        doc('.things').off(callback);
+        off();
 
         t.pass('no click heard');
 
@@ -295,7 +295,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        doc.addClass('.things', 'stuff')();
+        doc.addClass('.things', 'stuff');
 
         t.equal(
             targetElement.className,
@@ -315,7 +315,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        doc.addClass('.things','stuff majigger')();
+        doc.addClass('.things','stuff majigger');
 
         t.equal(
             targetElement.className,
@@ -335,7 +335,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        doc.addClass('.things', 'stuff things')();
+        doc.addClass('.things', 'stuff things');
 
         t.equal(
             targetElement.className,
@@ -355,7 +355,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        doc.removeClass('.things', 'things')();
+        doc.removeClass('.things', 'things');
 
         t.equal(
             targetElement.className,
@@ -375,7 +375,7 @@ module.exports = function(test){
 
         t.plan(1);
 
-        doc.removeClass('.things', 'things stuff')();
+        doc.removeClass('.things', 'things stuff');
 
         t.equal(
             targetElement.className,
