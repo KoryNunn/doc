@@ -1,86 +1,81 @@
-(function (root, factory) {
-    if (typeof exports === 'object') {
-        module.exports = factory(require('./doc'));
-    } else if (typeof define === 'function' && define.amd) {
-        define(factory, require('./doc'));
-    } else {
-        root.floc = factory(root.doc);
-    }
-}(this, function (doc) {
-    var arrayProto = [],
-        window = this.window,
-        // Allows instantiation in node for libs that require() it.
-        document = window && window.document;
 
-    function getTargets(target){
-        if(typeof target === 'string'){
-            return document.querySelectorAll(target);
-        }
+var arrayProto = [],
+    doc = require('./doc'),
+    isList = require('./isList'),
+    document = {};
 
-        return target;
+if(typeof window !== 'undefined'){
+    document = window.document;
+}
+
+function getTargets(target){
+    if(typeof target === 'string'){
+        return document.querySelectorAll(target);
     }
 
-    function floc(instance, target){
-        var items = getTargets(target)
+    return target;
+}
 
-        if(!(items instanceof NodeList)){
-            items = [items || document];
-        }
+function floc(instance, target){
+    var items = getTargets(target)
 
-        for(var i = 0; i < items.length; i++) {
-            instance.push(items[i]);
-        }
-        return instance;
+    if(!isList(items)){
+        items = [items || document];
     }
 
-    function Floc(target){
-        if(!(this instanceof Floc)){
-            return new Floc(target);
-        }
-        return floc(this, target);
+    for(var i = 0; i < items.length; i++) {
+        instance.push(items[i]);
     }
-    Floc.prototype = [];
-    Floc.prototype.constructor = Floc;
+    return instance;
+}
 
-    for(var key in doc){
-        if(typeof doc[key] === 'function'){
-            Floc.prototype[key] = (function(key){
-                return function(){
-                    var args = arrayProto.slice.call(arguments);
-
-                    args.unshift(this);
-
-                    var result = doc[key].apply(this, args);
-
-                    if(result !== this && result && result.length){
-                        return new Floc(result);
-                    }
-                    return result;
-                };
-            }(key));
-        }
+function Floc(target){
+    if(!(this instanceof Floc)){
+        return new Floc(target);
     }
-    Floc.prototype.on = function(events, target, callback){
-        var proxy = this;
-        if(typeof target === 'function'){
-            callback = target;
-            target = this;
-            proxy = null;
-        }
-        doc.on(events, target, callback, proxy);
-        return this;
-    };
+    return floc(this, target);
+}
+Floc.prototype = [];
+Floc.prototype.constructor = Floc;
 
-    Floc.prototype.off = function(events, target, callback){
-        var reference = this;
-        if(typeof target === 'function'){
-            callback = target;
-            target = this;
-            reference = null;
-        }
-        doc.off(events, target, callback, reference);
-        return this;
-    };
+for(var key in doc){
+    if(typeof doc[key] === 'function'){
+        Floc.prototype[key] = (function(key){
+            return function(){
+                var args = arrayProto.slice.call(arguments);
 
-    return Floc;
-}));
+                args.unshift(this);
+
+                var result = doc[key].apply(this, args);
+
+                if(result !== this && result && result.length){
+                    return new Floc(result);
+                }
+                return result;
+            };
+        }(key));
+    }
+}
+Floc.prototype.on = function(events, target, callback){
+    var proxy = this;
+    if(typeof target === 'function'){
+        callback = target;
+        target = this;
+        proxy = null;
+    }
+    doc.on(events, target, callback, proxy);
+    return this;
+};
+
+Floc.prototype.off = function(events, target, callback){
+    var reference = this;
+    if(typeof target === 'function'){
+        callback = target;
+        target = this;
+        reference = null;
+    }
+    doc.off(events, target, callback, reference);
+    return this;
+};
+
+module.exports = Floc;
