@@ -47,7 +47,7 @@
         }
         target = getTarget(target);
 
-        if(target && target instanceof Array){
+        if(target instanceof Array){
             var results = [];
             for (var i = 0; i < target.length; i++) {
                 results = results.concat(arrayProto.slice.call(doc.find(target[i], query)));
@@ -83,7 +83,7 @@
         }
         target = getTarget(target);
 
-        if(target && target instanceof Array){
+        if(target instanceof Array){
             var result;
             for (var i = 0; i < target.length; i++) {
                 result = doc.findOne(target[i], query);
@@ -113,7 +113,7 @@
     function closest(target, query){
         target = getTarget(target);
 
-        if(target && target instanceof Array){
+        if(target instanceof Array){
             target = target[0];
         }
 
@@ -144,7 +144,7 @@
     function is(target, query){
         target = getTarget(target);
 
-        if(target && target instanceof Array){
+        if(target instanceof Array){
             target = target[0];
         }
 
@@ -170,7 +170,7 @@
     function addClass(target, classes){
         target = getTarget(target);
 
-        if(target && target instanceof Array){
+        if(target instanceof Array){
             for (var i = 0; i < target.length; i++) {
                 doc.addClass(target[i], classes);
             }
@@ -216,7 +216,7 @@
     function removeClass(target, classes){
         target = getTarget(target);
 
-        if(target && target instanceof Array){
+        if(target instanceof Array){
             for (var i = 0; i < target.length; i++) {
                 doc.removeClass(target[i], classes);
             }
@@ -276,10 +276,26 @@
 
     function on(events, target, callback, proxy){
 
-        if(typeof target === 'object' && target.length){
+        // handles multiple targets
+        if(target instanceof Array){
             var multiRemoveCallbacks = [];
             for (var i = 0; i < target.length; i++) {
                 multiRemoveCallbacks.push(doc.on(events, target[i], callback, proxy));
+            }
+            return function(){
+                while(multiRemoveCallbacks.length){
+                    multiRemoveCallbacks.pop()();
+                }
+            };
+        }
+
+        // handles multiple proxies
+        // Already handles multiple proxies and targets,
+        // because the target loop calls this loop.
+        if(proxy instanceof Array){
+            var multiRemoveCallbacks = [];
+            for (var i = 0; i < proxy.length; i++) {
+                multiRemoveCallbacks.push(doc.on(events, target, callback, proxy[i]));
             }
             return function(){
                 while(multiRemoveCallbacks.length){
@@ -343,9 +359,15 @@
     */
 
     function off(events, target, callback, proxy){
-        if(target && target instanceof Array){
+        if(target instanceof Array){
             for (var i = 0; i < target.length; i++) {
                 doc.off(events, target[i], callback, proxy);
+            }
+            return this;
+        }
+        if(proxy instanceof Array){
+            for (var i = 0; i < proxy.length; i++) {
+                doc.off(events, target, callback, proxy[i]);
             }
             return this;
         }
@@ -390,7 +412,7 @@
         var target = getTarget(target),
             children = getTarget(children);
 
-        if(target && target instanceof Array){
+        if(target instanceof Array){
             target = target[0];
         }
 
@@ -422,7 +444,7 @@
         var target = getTarget(target),
             children = getTarget(children);
 
-        if(target && target instanceof Array){
+        if(target instanceof Array){
             target = target[0];
         }
 
