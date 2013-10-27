@@ -1,54 +1,41 @@
-
 var arrayProto = [],
     doc = require('./doc'),
     isList = require('./isList'),
+    getTargets = require('./getTargets'),
     document = {};
 
 if(typeof window !== 'undefined'){
     document = window.document;
 }
 
-function getTargets(target){
-    if(typeof target === 'string'){
-        return document.querySelectorAll(target);
-    }
-
-    return target;
-}
-
-function floc(instance, target){
-    var items = getTargets(target)
-
-    if(!isList(items)){
-        items = [items || document];
-    }
-
-    for(var i = 0; i < items.length; i++) {
-        instance.push(items[i]);
-    }
-    return instance;
-}
-
 function Floc(target){
     if(!(this instanceof Floc)){
         return new Floc(target);
     }
-    return floc(this, target);
+    var items = getTargets(target);
+
+    if(!isList(items)){
+        if(items){
+            this.push(items);
+        }
+        return this;
+    }
+
+    for(var i = 0; i < items.length; i++) {
+        this.push(items[i]);
+    }
 }
 Floc.prototype = [];
 Floc.prototype.constructor = Floc;
 
 for(var key in doc){
     if(typeof doc[key] === 'function'){
+        Floc[key] = doc[key];
         Floc.prototype[key] = (function(key){
-            return function(){
-                var args = arrayProto.slice.call(arguments);
+            return function(a,b,c,d,e,f){
+                var result = doc[key](this, a,b,c,d,e,f);
 
-                args.unshift(this);
-
-                var result = doc[key].apply(this, args);
-
-                if(result !== this && result && result.length){
+                if(result !== doc && isList(result)){
                     return new Floc(result);
                 }
                 return result;
@@ -78,4 +65,4 @@ Floc.prototype.off = function(events, target, callback){
     return this;
 };
 
-module.exports = Floc;
+module.exports = window.doc = Floc;
