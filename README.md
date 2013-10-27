@@ -29,16 +29,7 @@ Legacy way example:
 
 Fluent way example:
 
-    doc(target).is(selector)();
-
-Note that the fluent way will build a list of opperations to perform, and won't execute them untill you call the returned function:
-
-    var thingsToDo = doc(target).addClass('things').is('.things');
-
-    // nothing touched yet...
-
-    // execute the opperations.
-    thingsToDo();
+    doc(target).is(selector);
 
 # Goals #
 
@@ -52,7 +43,7 @@ about 1.3k min'd and gzipped (I added features..)
 
 ## Fast ##
 
-http://jsperf.com/closest-element
+http://jsperf.com/doc-vs-jquery/8
 
 # License #
 

@@ -1,16 +1,9 @@
-var arrayProto = [],
-    doc = require('./doc'),
+var doc = require('./doc'),
     isList = require('./isList'),
     getTargets = require('./getTargets'),
-    document = {};
+    flocProto = {};
 
-if(typeof window !== 'undefined'){
-    document = window.document;
-}
-
-flocProto = {};
-
-function Floc(target){
+function floc(target){
     var instance = getTargets(target);
 
     if(!isList(instance)){
@@ -21,19 +14,22 @@ function Floc(target){
         }
     }
 
+    // This is extremely dodgy, however it is also
+    // extremely fast, so shudup..
     instance.__proto__ = flocProto;
     return instance;
 }
 
 for(var key in doc){
     if(typeof doc[key] === 'function'){
-        Floc[key] = doc[key];
+        floc[key] = doc[key];
         flocProto[key] = (function(key){
+            // This is also extremely dodgy and fast
             return function(a,b,c,d,e,f){
                 var result = doc[key](this, a,b,c,d,e,f);
 
                 if(result !== doc && isList(result)){
-                    return Floc(result);
+                    return floc(result);
                 }
                 return result;
             };
@@ -62,4 +58,4 @@ flocProto.off = function(events, target, callback){
     return this;
 };
 
-module.exports = Floc;
+module.exports = floc;

@@ -2,11 +2,7 @@ var arrayProto = [],
     isList = require('./isList');
     getTargets = require('./getTargets'),
     getTarget = require('./getTarget'),
-    document = {};
-
-if(typeof window !== 'undefined'){
-    document = window.document;
-}
+    d = document; // aliased for minification
 
 ///[README.md]
 
@@ -25,7 +21,7 @@ function isIn(array, item){
     finds elements that match the query within the scope of target
 
         //fluent
-        doc(target).find(query)();
+        doc(target).find(query);
 
         //legacy
         doc.find(target, query);
@@ -60,7 +56,7 @@ function find(target, query){
     finds the first element that matches the query within the scope of target
 
         //fluent
-        doc(target).findOne(query)();
+        doc(target).findOne(query);
 
         //legacy
         doc.findOne(target, query);
@@ -93,7 +89,7 @@ function findOne(target, query){
     recurses up the DOM from the target node, checking if the current element matches the query
 
         //fluent
-        doc(target).closest(query)();
+        doc(target).closest(query);
 
         //legacy
         doc.closest(target, query);
@@ -114,7 +110,7 @@ function closest(target, query){
         target = target.parentNode;
     }
 
-    return target === document && target !== query ? null : target;
+    return target === d && target !== query ? null : target;
 };
 
 /**
@@ -124,7 +120,7 @@ function closest(target, query){
     returns true if the target element matches the query
 
         //fluent
-        doc(target).is(query)();
+        doc(target).is(query);
 
         //legacy
         doc.is(target, query);
@@ -150,7 +146,7 @@ function is(target, query){
     adds classes to the target
 
         //fluent
-        doc(target).addClass(query)();
+        doc(target).addClass(query);
 
         //legacy
         doc.addClass(target, query);
@@ -196,7 +192,7 @@ function addClass(target, classes){
     removes classes from the target
 
         //fluent
-        doc(target).removeClass(query)();
+        doc(target).removeClass(query);
 
         //legacy
         doc.removeClass(target, query);
@@ -255,7 +251,7 @@ function addEvent(settings){
     binds a callback to a target when a DOM event is raised.
 
         //fluent
-        doc(target/proxy).on(events, target[optional], callback)();
+        doc(target/proxy).on(events, target[optional], callback);
 
     note: if a target is passed to the .on function, doc's target will be used as the proxy.
 
@@ -276,7 +272,7 @@ function on(events, target, callback, proxy){
         }
         return function(){
             while(multiRemoveCallbacks.length){
-                multiRemoveCallbacks.pop()();
+                multiRemoveCallbacks.pop();
             }
         };
     }
@@ -291,7 +287,7 @@ function on(events, target, callback, proxy){
         }
         return function(){
             while(multiRemoveCallbacks.length){
-                multiRemoveCallbacks.pop()();
+                multiRemoveCallbacks.pop();
             }
         };
     }
@@ -306,7 +302,7 @@ function on(events, target, callback, proxy){
         var eventSettings = {};
         if(proxy){
             if(proxy === true){
-                proxy = document;
+                proxy = d;
             }
             eventSettings.target = proxy;
             eventSettings.callback = function(event){
@@ -342,7 +338,7 @@ function on(events, target, callback, proxy){
     removes events assigned to a target.
 
         //fluent
-        doc(target/proxy).off(events, target[optional], callback)();
+        doc(target/proxy).off(events, target[optional], callback);
 
     note: if a target is passed to the .on function, doc's target will be used as the proxy.
 
@@ -373,7 +369,7 @@ function off(events, target, callback, proxy){
         callback = null;
     }
 
-    proxy = proxy ? getTarget(proxy) : document;
+    proxy = proxy ? getTarget(proxy) : d;
 
     var targets = find(target, proxy);
 
@@ -478,7 +474,7 @@ function isVisible(target){
         target = target.parentNode;
     }
 
-    return target === document;
+    return target === d;
 };
 
 var doc = {};
