@@ -6,7 +6,7 @@
     "DOM"
   ],
   "version": "0.2.2",
-  "main": "doc.js",
+  "main": "fluent.js",
   "devDependencies": {
     "tape": "x.x.x",
     "crel": "x.x.x"

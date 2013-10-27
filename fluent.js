@@ -8,42 +8,39 @@ if(typeof window !== 'undefined'){
     document = window.document;
 }
 
+flocProto = {};
+
 function Floc(target){
-    if(!(this instanceof Floc)){
-        return new Floc(target);
-    }
-    var items = getTargets(target);
+    var instance = getTargets(target);
 
-    if(!isList(items)){
-        if(items){
-            this.push(items);
+    if(!isList(instance)){
+        if(instance){
+            instance = [instance];
+        }else{
+            instance = [];
         }
-        return this;
     }
 
-    for(var i = 0; i < items.length; i++) {
-        this.push(items[i]);
-    }
+    instance.__proto__ = flocProto;
+    return instance;
 }
-Floc.prototype = [];
-Floc.prototype.constructor = Floc;
 
 for(var key in doc){
     if(typeof doc[key] === 'function'){
         Floc[key] = doc[key];
-        Floc.prototype[key] = (function(key){
+        flocProto[key] = (function(key){
             return function(a,b,c,d,e,f){
                 var result = doc[key](this, a,b,c,d,e,f);
 
                 if(result !== doc && isList(result)){
-                    return new Floc(result);
+                    return Floc(result);
                 }
                 return result;
             };
         }(key));
     }
 }
-Floc.prototype.on = function(events, target, callback){
+flocProto.on = function(events, target, callback){
     var proxy = this;
     if(typeof target === 'function'){
         callback = target;
@@ -54,7 +51,7 @@ Floc.prototype.on = function(events, target, callback){
     return this;
 };
 
-Floc.prototype.off = function(events, target, callback){
+flocProto.off = function(events, target, callback){
     var reference = this;
     if(typeof target === 'function'){
         callback = target;
@@ -65,4 +62,4 @@ Floc.prototype.off = function(events, target, callback){
     return this;
 };
 
-module.exports = window.doc = Floc;
+module.exports = Floc;
