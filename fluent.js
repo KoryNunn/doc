@@ -1,62 +1,46 @@
-
 var arrayProto = [],
     doc = require('./doc'),
     isList = require('./isList'),
+    getTargets = require('./getTargets'),
     document = {};
 
 if(typeof window !== 'undefined'){
     document = window.document;
 }
 
-function getTargets(target){
-    if(typeof target === 'string'){
-        return document.querySelectorAll(target);
+flocProto = {};
+
+function Floc(target){
+    var instance = getTargets(target);
+
+    if(!isList(instance)){
+        if(instance){
+            instance = [instance];
+        }else{
+            instance = [];
+        }
     }
 
-    return target;
-}
-
-function floc(instance, target){
-    var items = getTargets(target)
-
-    if(!isList(items)){
-        items = [items || document];
-    }
-
-    for(var i = 0; i < items.length; i++) {
-        instance.push(items[i]);
-    }
+    instance.__proto__ = flocProto;
     return instance;
 }
 
-function Floc(target){
-    if(!(this instanceof Floc)){
-        return new Floc(target);
-    }
-    return floc(this, target);
-}
-Floc.prototype = [];
-Floc.prototype.constructor = Floc;
-
 for(var key in doc){
     if(typeof doc[key] === 'function'){
-        Floc.prototype[key] = (function(key){
-            return function(){
-                var args = arrayProto.slice.call(arguments);
+        Floc[key] = doc[key];
+        flocProto[key] = (function(key){
+            return function(a,b,c,d,e,f){
+                var result = doc[key](this, a,b,c,d,e,f);
 
-                args.unshift(this);
-
-                var result = doc[key].apply(this, args);
-
-                if(result !== this && result && result.length){
-                    return new Floc(result);
+                if(result !== doc && isList(result)){
+                    return Floc(result);
                 }
                 return result;
             };
         }(key));
     }
 }
-Floc.prototype.on = function(events, target, callback){
+flocProto.on = function(events, target, callback){
     var proxy = this;
     if(typeof target === 'function'){
         callback = target;
@@ -67,7 +51,7 @@ Floc.prototype.on = function(events, target, callback){
     return this;
 };
 
-Floc.prototype.off = function(events, target, callback){
+flocProto.off = function(events, target, callback){
     var reference = this;
     if(typeof target === 'function'){
         callback = target;

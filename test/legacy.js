@@ -1,4 +1,4 @@
-var doc = require('../'),
+var doc = require('../fluent'),
     crel = require('crel');
 
 module.exports = function(test){

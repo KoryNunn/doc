@@ -1,24 +1,21 @@
 var arrayProto = [],
     isList = require('./isList');
+    getTargets = require('./getTargets'),
+    getTarget = require('./getTarget'),
     document = {};
 
 if(typeof window !== 'undefined'){
     document = window.document;
 }
 
-function getTarget(target){
-    if(isString(target)){
-        return document.querySelector(target);
-    }
-
-    return target;
-}
-
 ///[README.md]
 
-
-function isString(thing){
-    return typeof thing === 'string';
+function isIn(array, item){
+    for(var i = 0; i < array.length; i++) {
+        if(item === array[i]){
+            return true;
+        }
+    }
 }
 
 /**
@@ -35,20 +32,19 @@ function isString(thing){
 */
 
 function find(target, query){
+    target = getTargets(target);
     if(query == null){
-        query = target;
-        target = document;
+        return target;
     }
-    target = getTarget(target);
 
     if(isList(target)){
         var results = [];
         for (var i = 0; i < target.length; i++) {
-            results = results.concat(arrayProto.slice.call(doc.find(target[i], query)));
-        }
-        for (var i = 0; i < results.length; i++) {
-            if(results.lastIndexOf(results[i]) !== i){
-                results.splice(i--,1);
+            var subResults = doc.find(target[i], query);
+            for(var j = 0; j < subResults.length; j++) {
+                if(!isIn(results, subResults[j])){
+                    results.push(subResults[j]);
+                }
             }
         }
         return results;
@@ -71,16 +67,15 @@ function find(target, query){
 */
 
 function findOne(target, query){
-    if(query == null){
-        query = target;
-        target = document;
-    }
     target = getTarget(target);
+    if(query == null){
+        return target;
+    }
 
     if(isList(target)){
         var result;
         for (var i = 0; i < target.length; i++) {
-            result = doc.findOne(target[i], query);
+            result = findOne(target[i], query);
             if(result){
                 break;
             }
@@ -114,7 +109,7 @@ function closest(target, query){
     while(
         target &&
         target.ownerDocument &&
-        !doc.is(target, query)
+        !is(target, query)
     ){
         target = target.parentNode;
     }
@@ -145,7 +140,7 @@ function is(target, query){
     if(!target.ownerDocument || typeof query !== 'string'){
         return target === query;
     }
-    return target === query || arrayProto.slice.call(doc.find(target.parentNode, query)).indexOf(target) >= 0;
+    return target === query || arrayProto.indexOf.call(find(target.parentNode, query), target) >= 0;
 };
 
 /**
@@ -162,11 +157,11 @@ function is(target, query){
 */
 
 function addClass(target, classes){
-    target = getTarget(target);
+    target = getTargets(target);
 
     if(isList(target)){
         for (var i = 0; i < target.length; i++) {
-            doc.addClass(target[i], classes);
+            addClass(target[i], classes);
         }
         return this;
     }
@@ -208,11 +203,11 @@ function addClass(target, classes){
 */
 
 function removeClass(target, classes){
-    target = getTarget(target);
+    target = getTargets(target);
 
     if(isList(target)){
         for (var i = 0; i < target.length; i++) {
-            doc.removeClass(target[i], classes);
+            removeClass(target[i], classes);
         }
         return this;
     }
@@ -270,11 +265,14 @@ function addEvent(settings){
 
 function on(events, target, callback, proxy){
 
+    target = getTargets(target);
+    proxy = getTargets(proxy);
+
     // handles multiple targets
     if(isList(target)){
         var multiRemoveCallbacks = [];
         for (var i = 0; i < target.length; i++) {
-            multiRemoveCallbacks.push(doc.on(events, target[i], callback, proxy));
+            multiRemoveCallbacks.push(on(events, target[i], callback, proxy));
         }
         return function(){
             while(multiRemoveCallbacks.length){
@@ -286,10 +284,10 @@ function on(events, target, callback, proxy){
     // handles multiple proxies
     // Already handles multiple proxies and targets,
     // because the target loop calls this loop.
-    if(proxy instanceof Array){
+    if(isList(proxy)){
         var multiRemoveCallbacks = [];
         for (var i = 0; i < proxy.length; i++) {
-            multiRemoveCallbacks.push(doc.on(events, target, callback, proxy[i]));
+            multiRemoveCallbacks.push(on(events, target, callback, proxy[i]));
         }
         return function(){
             while(multiRemoveCallbacks.length){
@@ -312,7 +310,7 @@ function on(events, target, callback, proxy){
             }
             eventSettings.target = proxy;
             eventSettings.callback = function(event){
-                var closestTarget = doc.closest(event.target, target);
+                var closestTarget = closest(event.target, target);
                 if(closestTarget){
                     callback(event, closestTarget);
                 }
@@ -355,13 +353,13 @@ function on(events, target, callback, proxy){
 function off(events, target, callback, proxy){
     if(isList(target)){
         for (var i = 0; i < target.length; i++) {
-            doc.off(events, target[i], callback, proxy);
+            off(events, target[i], callback, proxy);
         }
         return this;
     }
     if(proxy instanceof Array){
         for (var i = 0; i < proxy.length; i++) {
-            doc.off(events, target, callback, proxy[i]);
+            off(events, target, callback, proxy[i]);
         }
         return this;
     }
@@ -410,10 +408,9 @@ function append(target, children){
         target = target[0];
     }
 
-    if(children.length){
-        children = arrayProto.slice.call(children);
+    if(isList(children)){
         for (var i = 0; i < children.length; i++) {
-            doc.append(target, children[i]);
+            append(target, children[i]);
         }
         return;
     }
@@ -442,12 +439,10 @@ function prepend(target, children){
         target = target[0];
     }
 
-    if(children.length){
-        children = arrayProto.slice.call(children);
-
+    if(isList(children)){
         //reversed because otherwise the would get put in in the wrong order.
         for (var i = children.length -1; i; i--) {
-            doc.prepend(target, children[i]);
+            prepend(target, children[i]);
         }
         return;
     }
@@ -476,7 +471,7 @@ function isVisible(target){
     if(isList(target)){
         var i = -1;
 
-        while (target[i++] && doc.isVisible(target[i])) {}
+        while (target[i++] && isVisible(target[i])) {}
         return target.length >= i;
     }
     while(target.parentNode && target.style.display !== 'none'){
