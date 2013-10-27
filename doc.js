@@ -2,6 +2,7 @@ var arrayProto = [],
     isList = require('./isList');
     getTargets = require('./getTargets'),
     getTarget = require('./getTarget'),
+    space = ' ',
     d = document; // aliased for minification
 
 ///[README.md]
@@ -165,12 +166,12 @@ function addClass(target, classes){
         return this;
     }
 
-    var classes = classes.split(' '),
-        currentClasses = target.classList ? null : target.className.split(' ');
+    var classes = classes.split(space),
+        currentClasses = target.classList ? null : target.className.split(space);
 
     for(var i = 0; i < classes.length; i++){
         var classToAdd = classes[i];
-        if(!classToAdd || classToAdd === ' '){
+        if(!classToAdd || classToAdd === space){
             continue;
         }
         if(target.classList){
@@ -180,7 +181,7 @@ function addClass(target, classes){
         }
     }
     if(!target.classList){
-        target.className = currentClasses.join(' ');
+        target.className = currentClasses.join(space);
     }
     return this;
 };
@@ -212,12 +213,12 @@ function removeClass(target, classes){
         return this;
     }
 
-    var classes = classes.split(' '),
-        currentClasses = target.classList ? null : target.className.split(' ');
+    var classes = classes.split(space),
+        currentClasses = target.classList ? null : target.className.split(space);
 
     for(var i = 0; i < classes.length; i++){
         var classToRemove = classes[i];
-        if(!classToRemove || classToRemove === ' '){
+        if(!classToRemove || classToRemove === space){
             continue;
         }
         if(target.classList){
@@ -230,7 +231,7 @@ function removeClass(target, classes){
         }
     }
     if(!target.classList){
-        target.className = currentClasses.join(' ');
+        target.className = currentClasses.join(space);
     }
     return this;
 };
@@ -295,7 +296,7 @@ function on(events, target, callback, proxy){
     var removeCallbacks = [];
 
     if(typeof events === 'string'){
-        events = events.split(' ');
+        events = events.split(space);
     }
 
     for(var i = 0; i < events.length; i++){
@@ -361,7 +362,7 @@ function off(events, target, callback, proxy){
     }
 
     if(typeof events === 'string'){
-        events = events.split(' ');
+        events = events.split(space);
     }
 
     if(typeof callback !== 'function'){
