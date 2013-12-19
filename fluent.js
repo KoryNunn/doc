@@ -1,7 +1,23 @@
 var doc = require('./doc'),
     isList = require('./isList'),
     getTargets = require('./getTargets'),
-    flocProto = {};
+    flocProto = [],
+    supportsDunderProto = false;
+
+// Test if this runtime supports dunderProto manipulation.
+var testObj = {};
+testObj.__proto__ = {
+    a:true
+};
+supportsDunderProto = testObj.a;
+
+function Floc(instance){
+    for(var key in instance){
+        this[key] = instance[key];
+    }
+}
+Floc.prototype = flocProto;
+flocProto.constructor = Floc;
 
 function floc(target){
     var instance = getTargets(target);
@@ -14,9 +30,14 @@ function floc(target){
         }
     }
 
-    // This is extremely dodgy, however it is also
-    // extremely fast, so shudup..
-    instance.__proto__ = flocProto;
+    if(supportsDunderProto){
+        // dodgy but fast
+        // Works in browsers
+        instance.__proto__ = flocProto;
+    }else{
+        // Works in IE.
+        return new Floc(instance);
+    }
     return instance;
 }
 
