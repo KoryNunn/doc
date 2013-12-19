@@ -478,6 +478,34 @@ function isVisible(target){
     return target === d;
 };
 
+
+
+/**
+
+    ## .ready
+
+    call a callback when the document is ready.
+
+        //fluent
+        doc().ready(callback);
+
+        //legacy
+        doc.ready(callback);
+*/
+
+function ready(target, callback){
+    if(typeof target === 'function' && !callback){
+        callback = target;
+    }
+    if(document.body){
+        callback();
+    }else{
+        doc.on('load', window, function(){
+            callback();
+        });
+    }
+};
+
 var doc = {};
 doc.find = find;
 doc.findOne = findOne;
@@ -490,5 +518,6 @@ doc.on = on;
 doc.append = append;
 doc.prepend = prepend;
 doc.isVisible = isVisible;
+doc.ready = ready;
 
 module.exports = doc;

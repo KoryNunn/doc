@@ -429,4 +429,14 @@ module.exports = function(test){
 
         t.end();
     });
+
+    test('ready', function(t) {
+        t.plan(1);
+
+        doc.ready(function(){
+            t.pass();
+        });
+
+        t.end();
+    });
 };

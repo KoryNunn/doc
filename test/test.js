@@ -1,6 +1,6 @@
 var doc = require('../'),
     crel = require('crel'),
-    test = require('tape');
+    test = require('grape');
 
 function reset(){
     document.body.innerHTML = '';
