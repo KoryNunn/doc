@@ -372,7 +372,7 @@ function off(events, target, callback, proxy){
 
     proxy = proxy ? getTarget(proxy) : d;
 
-    var targets = find(target, proxy);
+    var targets = typeof target === 'string' ? find(target, proxy) : [target];
 
     for(var targetIndex = 0; targetIndex < targets.length; targetIndex++){
         var currentTarget = targets[targetIndex];
