@@ -5,7 +5,7 @@
   "tags": [
     "DOM"
   ],
-  "version": "0.4.2",
+  "version": "0.4.3",
   "main": "fluent.js",
   "devDependencies": {
     "tape": "x.x.x",
