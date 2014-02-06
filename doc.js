@@ -262,20 +262,22 @@ function addEvent(settings){
 
 function on(events, target, callback, proxy){
 
-    target = getTargets(target);
     proxy = getTargets(proxy);
 
-    // handles multiple targets
-    if(isList(target)){
-        var multiRemoveCallbacks = [];
-        for (var i = 0; i < target.length; i++) {
-            multiRemoveCallbacks.push(on(events, target[i], callback, proxy));
-        }
-        return function(){
-            while(multiRemoveCallbacks.length){
-                multiRemoveCallbacks.pop();
+    if(!proxy){
+        target = getTargets(target);
+        // handles multiple targets
+        if(isList(target)){
+            var multiRemoveCallbacks = [];
+            for (var i = 0; i < target.length; i++) {
+                multiRemoveCallbacks.push(on(events, target[i], callback, proxy));
             }
-        };
+            return function(){
+                while(multiRemoveCallbacks.length){
+                    multiRemoveCallbacks.pop();
+                }
+            };
+        }
     }
 
     // handles multiple proxies

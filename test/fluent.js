@@ -286,6 +286,33 @@ module.exports = function(test){
         t.end();
     });
 
+    test('on click delegated late-created target', function(t) {
+        var delegateElement,
+            targetElement = crel('div', {'class':'stuff'});
+
+        crel(document.body,
+            delegateElement = crel('div', {'class':'things'})
+        );
+
+        t.plan(1);
+
+        doc('.things').on('click', '.stuff', function(event){
+            if(event.target === targetElement){
+                t.pass('recieved click event');
+            }else{
+                t.fail('wrong target');
+            }
+        });
+
+        crel(delegateElement, targetElement);
+
+        targetElement.click();
+
+        delegateElement.click();
+
+        t.end();
+    });
+
     test('add class', function(t) {
         var targetElement;
 
