@@ -2,7 +2,7 @@
 var singleClass = /^\.\w+$/,
     singleId = /^#\w+$/,
     singleTag = /^\w+$/,
-    d = document; // aliased for minification
+    d = require('./document'); // aliased for minification
 
 module.exports = function getTargets(target){
     if(typeof target === 'string'){

@@ -10,7 +10,8 @@
   "devDependencies": {
     "tape": "x.x.x",
     "crel": "x.x.x",
-    "grape": "~0.1.7"
+    "grape": "~0.1.7",
+    "min-document": "~0.3.1"
   },
   "repository": {
     "type": "git",

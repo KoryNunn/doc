@@ -1,5 +1,5 @@
 var singleId = /^#\w+$/,
-    d = document; // aliased for minification
+    d = require('./document'); // aliased for minification
 
 module.exports = function getTarget(target){
     if(typeof target === 'string'){

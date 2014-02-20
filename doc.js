@@ -3,7 +3,7 @@ var arrayProto = [],
     getTargets = require('./getTargets'),
     getTarget = require('./getTarget'),
     space = ' ',
-    d = document; // aliased for minification
+    d = require('./document'); // aliased for minification
 
 ///[README.md]
 
@@ -499,7 +499,7 @@ function ready(target, callback){
     if(typeof target === 'function' && !callback){
         callback = target;
     }
-    if(document.body){
+    if(d.body){
         callback();
     }else{
         doc.on('load', window, function(){
