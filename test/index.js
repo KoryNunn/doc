@@ -1,10 +1,9 @@
 var doc = require('../'),
     crel = require('crel'),
-    test = require('grape'),
-    d = require('../document');
+    test = require('grape');
 
 function reset(){
-    d.body.innerHTML = '';
+    document.body.innerHTML = '';
 }
 
 var oldTest = test;

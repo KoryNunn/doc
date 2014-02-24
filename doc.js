@@ -1,9 +1,16 @@
+var doc = {
+    document: document,
+    setDocument: function(d){
+        this.document = d;
+    }
+};
+
 var arrayProto = [],
     isList = require('./isList');
-    getTargets = require('./getTargets'),
-    getTarget = require('./getTarget'),
-    space = ' ',
-    d = require('./document'); // aliased for minification
+    getTargets = require('./getTargets')(doc.document),
+    getTarget = require('./getTarget')(doc.document),
+    space = ' ';
+
 
 ///[README.md]
 
@@ -111,7 +118,7 @@ function closest(target, query){
         target = target.parentNode;
     }
 
-    return target === d && target !== query ? null : target;
+    return target === doc.document && target !== query ? null : target;
 };
 
 /**
@@ -305,7 +312,7 @@ function on(events, target, callback, proxy){
         var eventSettings = {};
         if(proxy){
             if(proxy === true){
-                proxy = d;
+                proxy = doc.document;
             }
             eventSettings.target = proxy;
             eventSettings.callback = function(event){
@@ -372,7 +379,7 @@ function off(events, target, callback, proxy){
         callback = null;
     }
 
-    proxy = proxy ? getTarget(proxy) : d;
+    proxy = proxy ? getTarget(proxy) : doc.document;
 
     var targets = typeof target === 'string' ? find(target, proxy) : [target];
 
@@ -477,7 +484,7 @@ function isVisible(target){
         target = target.parentNode;
     }
 
-    return target === d;
+    return target === doc.document;
 };
 
 
@@ -499,7 +506,7 @@ function ready(target, callback){
     if(typeof target === 'function' && !callback){
         callback = target;
     }
-    if(d.body){
+    if(doc.document.body){
         callback();
     }else{
         doc.on('load', window, function(){
@@ -508,7 +515,6 @@ function ready(target, callback){
     }
 };
 
-var doc = {};
 doc.find = find;
 doc.findOne = findOne;
 doc.closest = closest;

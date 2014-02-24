@@ -1,1 +1,0 @@
-module.exports = typeof document !== 'undefined' ? document : require('min-document');

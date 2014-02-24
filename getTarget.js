@@ -1,13 +1,14 @@
-var singleId = /^#\w+$/,
-    d = require('./document'); // aliased for minification
+var singleId = /^#\w+$/;
 
-module.exports = function getTarget(target){
-    if(typeof target === 'string'){
-        if(singleId.exec(target)){
-            return d.getElementById(target.slice(1));
+module.exports = function(document){
+    return function getTarget(target){
+        if(typeof target === 'string'){
+            if(singleId.exec(target)){
+                return document.getElementById(target.slice(1));
+            }
+            return document.querySelector(target);
         }
-        return d.querySelector(target);
-    }
 
-    return target;
-}
+        return target;
+    };
+};

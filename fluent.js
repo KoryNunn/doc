@@ -1,6 +1,6 @@
 var doc = require('./doc'),
     isList = require('./isList'),
-    getTargets = require('./getTargets'),
+    getTargets = require('./getTargets')(doc.document),
     flocProto = [];
 
 function Floc(items){
