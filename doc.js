@@ -1,5 +1,5 @@
 var doc = {
-    document: document,
+    document: typeof document !== 'undefined' ? document : null,
     setDocument: function(d){
         this.document = d;
     }
