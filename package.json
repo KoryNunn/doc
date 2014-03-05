@@ -19,5 +19,8 @@
   "bugs": {
     "url": "http://github.com/KoryNunn/doc/issues"
   },
-  "contributors": []
+  "contributors": [],
+  "dependencies": {
+    "min-document": "~0.3.1"
+  }
 }
