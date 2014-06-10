@@ -22,16 +22,22 @@ function floc(target){
     return new Floc(instance);
 }
 
+var returnsSelf = 'addClass removeClass append prepend'.split(' ');
+
 for(var key in doc){
     if(typeof doc[key] === 'function'){
         floc[key] = doc[key];
         flocProto[key] = (function(key){
+            var instance = this;
             // This is also extremely dodgy and fast
             return function(a,b,c,d,e,f){
                 var result = doc[key](this, a,b,c,d,e,f);
 
                 if(result !== doc && isList(result)){
                     return floc(result);
+                }
+                if(returnsSelf.indexOf(key) >=0){
+                    return instance;
                 }
                 return result;
             };
@@ -57,6 +63,16 @@ flocProto.off = function(events, target, callback){
         reference = null;
     }
     doc.off(events, target, callback, reference);
+    return this;
+};
+
+flocProto.addClass = function(className){
+    doc.addClass(this, className);
+    return this;
+};
+
+flocProto.removeClass = function(className){
+    doc.removeClass(this, className);
     return this;
 };
 
