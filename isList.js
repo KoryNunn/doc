@@ -3,8 +3,10 @@ module.exports = function isList(object){
         object instanceof Array ||
         (typeof HTMLCollection === 'function' && object instanceof HTMLCollection) ||
         (typeof NodeList === 'function' && object instanceof NodeList) ||
+        // YMMV
         Array.isArray(object) ||
         ''+object === '[object StaticNodeList]' ||
-        ''+object === '[object HTMLCollection]'
+        ''+object === '[object HTMLCollection]' ||
+        (typeof NodeList === 'object' && object instanceof NodeList)
     );
 }
