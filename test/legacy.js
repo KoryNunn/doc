@@ -17,7 +17,6 @@ module.exports = function(test){
             3,
             'found 3 spans'
         );
-        t.end();
     });
 
     test('find nested spans', function(t) {
@@ -36,7 +35,6 @@ module.exports = function(test){
             3,
             'found 3 spans'
         );
-        t.end();
     });
 
     test('find nested spans after context', function(t) {
@@ -55,7 +53,6 @@ module.exports = function(test){
             2,
             'found 2 nested spans'
         );
-        t.end();
     });
 
 
@@ -71,7 +68,6 @@ module.exports = function(test){
             1,
             'found 1 .things'
         );
-        t.end();
     });
 
     test('find by class with reference', function(t) {
@@ -86,7 +82,6 @@ module.exports = function(test){
             1,
             'found 1 .things'
         );
-        t.end();
     });
 
     test('find with node reference', function(t) {
@@ -101,7 +96,6 @@ module.exports = function(test){
             1,
             'found 1 .things'
         );
-        t.end();
     });
 
     test('is', function(t) {
@@ -116,7 +110,6 @@ module.exports = function(test){
             true,
             '.things is .things'
         );
-        t.end();
     });
 
     test('isnt..', function(t) {
@@ -131,7 +124,6 @@ module.exports = function(test){
             false,
             '.things is not .notThis'
         );
-        t.end();
     });
 
     test('closest', function(t) {
@@ -150,7 +142,6 @@ module.exports = function(test){
             'things',
             'found closest stuff to things'
         );
-        t.end();
     });
 
     test('closest via node', function(t) {

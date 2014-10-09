@@ -10,13 +10,13 @@ var oldTest = test;
 
 test = function(name, callback){
     oldTest(name, function(t){
-        var oldEnd = t.end;
-        t.end = function(){
-            reset();
-            oldEnd.apply(t);
-        }
         callback(t);
+        reset();
     })
+}
+
+Element.prototype.toJSON = function(){
+    return this.innerHTML || this.data;
 }
 
 require('./fluent')(test);
