@@ -45,6 +45,16 @@ about 1.3k min'd and gzipped (I added features..)
 
 http://jsperf.com/doc-vs-jquery/8
 
+## Browser support
+
+Works in browsers.
+
+Also works in IE >= 8 when you include a polyfill script in your page, like this one: 
+
+```html
+    <script src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
+```
+
 # License #
 
 MIT
