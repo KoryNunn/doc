@@ -21,3 +21,4 @@ Element.prototype.toJSON = function(){
 
 require('./fluent')(test);
 require('./legacy')(test);
+require('./isList')(test);
