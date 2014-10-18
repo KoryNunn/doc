@@ -508,7 +508,7 @@ function ready(target, callback){
     }
     if(doc.document && doc.document.body){
         callback();
-    }else{
+    }else if(typeof window !== 'undefined'){
         doc.on('load', window, function(){
             callback();
         });
