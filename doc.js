@@ -506,7 +506,7 @@ function ready(target, callback){
     if(typeof target === 'function' && !callback){
         callback = target;
     }
-    if(doc.document.body){
+    if(doc.document && doc.document.body){
         callback();
     }else{
         doc.on('load', window, function(){
