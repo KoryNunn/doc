@@ -524,9 +524,9 @@ function ready(target, callback){
     if(typeof target === 'function' && !callback){
         callback = target;
     }
-    if(doc.document.body){
+    if(doc.document && doc.document.body){
         callback();
-    }else{
+    }else if(typeof window !== 'undefined'){
         doc.on('load', window, function(){
             callback();
         });
