@@ -144,7 +144,25 @@ function is(target, query){
     if(!target.ownerDocument || typeof query !== 'string'){
         return target === query;
     }
-    return target === query || arrayProto.indexOf.call(find(target.parentNode, query), target) >= 0;
+
+    if(target === query){
+        return true;
+    }
+
+    var parentless = !target.parentNode;
+
+    if(parentless){
+        // Give the element a parent so that .querySelectorAll can be used
+        document.createDocumentFragment().appendChild(target);
+    }
+
+    var result = arrayProto.indexOf.call(find(target.parentNode, query), target) >= 0;
+
+    if(parentless){
+        target.parentNode.removeChild(target);
+    }
+        
+    return result;
 };
 
 /**

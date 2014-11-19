@@ -17,7 +17,6 @@ module.exports = function(test){
             3,
             'found 3 spans'
         );
-        t.end();
     });
 
     test('find nested spans', function(t) {
@@ -36,7 +35,6 @@ module.exports = function(test){
             3,
             'found 3 spans'
         );
-        t.end();
     });
 
     test('find nested spans after context', function(t) {
@@ -55,7 +53,6 @@ module.exports = function(test){
             2,
             'found 2 nested spans'
         );
-        t.end();
     });
 
 
@@ -71,7 +68,6 @@ module.exports = function(test){
             1,
             'found 1 .things'
         );
-        t.end();
     });
 
     test('find by class with reference', function(t) {
@@ -86,7 +82,6 @@ module.exports = function(test){
             1,
             'found 1 .things'
         );
-        t.end();
     });
 
     test('find with node reference', function(t) {
@@ -101,7 +96,6 @@ module.exports = function(test){
             1,
             'found 1 .things'
         );
-        t.end();
     });
 
     test('is', function(t) {
@@ -116,7 +110,18 @@ module.exports = function(test){
             true,
             '.things is .things'
         );
-        t.end();
+    });
+
+    test('parentless is', function(t) {
+        var element = crel('div', {'class':'things'});
+
+        t.plan(1);
+
+        t.equal(
+            doc(element).is('.things'),
+            true,
+            '.things is .things'
+        );
     });
 
     test('isnt..', function(t) {
@@ -131,7 +136,6 @@ module.exports = function(test){
             false,
             '.things is not .notThis'
         );
-        t.end();
     });
 
     test('closest', function(t) {
@@ -150,7 +154,6 @@ module.exports = function(test){
             'things',
             'found closest stuff to things'
         );
-        t.end();
     });
 
     test('closest via node', function(t) {
@@ -169,7 +172,6 @@ module.exports = function(test){
             'things',
             'found closest stuff to things'
         );
-        t.end();
     });
 
     test('closest document', function(t) {
@@ -188,7 +190,6 @@ module.exports = function(test){
             document,
             'found closest document'
         );
-        t.end();
     });
 
     test('on click', function(t) {
@@ -208,7 +209,6 @@ module.exports = function(test){
 
         targetElement.click();
 
-        t.end();
     });
 
     test('on click null target', function(t) {
@@ -230,7 +230,6 @@ module.exports = function(test){
 
         t.pass('no click heard');
 
-        t.end();
     });
 
     test('off click', function(t) {
@@ -256,7 +255,6 @@ module.exports = function(test){
 
         t.pass('no click heard');
 
-        t.end();
     });
 
     test('on click delegated', function(t) {
@@ -283,7 +281,6 @@ module.exports = function(test){
 
         delegateElement.click();
 
-        t.end();
     });
 
     test('on click delegated late-created target', function(t) {
@@ -310,7 +307,6 @@ module.exports = function(test){
 
         delegateElement.click();
 
-        t.end();
     });
 
     test('add class', function(t) {
@@ -330,7 +326,6 @@ module.exports = function(test){
             'target had new class'
         );
 
-        t.end();
     });
 
     test('add classes', function(t) {
@@ -350,7 +345,6 @@ module.exports = function(test){
             'target had new classes'
         );
 
-        t.end();
     });
 
     test('add dupliacte class', function(t) {
@@ -370,7 +364,6 @@ module.exports = function(test){
             'target had only new classes added'
         );
 
-        t.end();
     });
 
     test('remove class', function(t) {
@@ -390,7 +383,6 @@ module.exports = function(test){
             'target had class removed'
         );
 
-        t.end();
     });
 
     test('remove classes', function(t) {
@@ -410,7 +402,6 @@ module.exports = function(test){
             'target had classes removed'
         );
 
-        t.end();
     });
 
     test('append', function(t) {
@@ -431,7 +422,6 @@ module.exports = function(test){
             'element appended'
         );
 
-        t.end();
     });
 
     test('prepend', function(t) {
@@ -454,7 +444,6 @@ module.exports = function(test){
             'element prepended'
         );
 
-        t.end();
     });
 
     test('ready', function(t) {
@@ -464,6 +453,5 @@ module.exports = function(test){
             t.pass();
         });
 
-        t.end();
     });
 };
