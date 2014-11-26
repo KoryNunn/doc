@@ -523,11 +523,11 @@ function isVisible(target){
 function ready(callback){
     if(doc.document && doc.document.readyState === 'complete'){
         callback();
-    }else if(document.addEventListener){
-        document.addEventListener("DOMContentLoaded",callback,false);
     }else if(window.attachEvent){
         document.attachEvent("onreadystatechange", callback);
         window.attachEvent("onLoad",callback);
+    }else if(document.addEventListener){
+        document.addEventListener("DOMContentLoaded",callback,false);
     }
 };
 
