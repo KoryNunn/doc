@@ -520,25 +520,14 @@ function isVisible(target){
         doc.ready(callback);
 */
 
-function ready(target, callback){
-    if(typeof target === 'function' && !callback){
-        callback = target;
-    }
-    if(doc.document && doc.document.body){
+function ready(callback){
+    if(doc.document && doc.document.readyState === 'complete'){
         callback();
-    }else if(typeof window !== 'undefined'){
-        if('attachEvent' in doc.document){
-            var off = doc.on('onreadystatechange', window, function(){
-                if(doc.document.readyState === 'complete'){
-                    callback();
-                    off();
-                }
-            });
-            return;
-        }
-        doc.on('load', window, function(){
-            callback();
-        });
+    }else if(document.addEventListener){
+        document.addEventListener("DOMContentLoaded",callback,false);
+    }else if(window.attachEvent){
+        document.attachEvent("onreadystatechange", callback);
+        window.attachEvent("onLoad",callback);
     }
 };
 
