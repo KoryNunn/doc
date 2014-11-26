@@ -66,6 +66,11 @@ flocProto.off = function(events, target, callback){
     return this;
 };
 
+flocProto.ready = function(callback){
+    doc.ready(callback);
+    return this;
+};
+
 flocProto.addClass = function(className){
     doc.addClass(this, className);
     return this;

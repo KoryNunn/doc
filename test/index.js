@@ -1,3 +1,6 @@
+// THANKS PHANTOMJS
+require('polyfill-function-prototype-bind');
+
 var doc = require('../'),
     crel = require('crel'),
     test = require('grape');

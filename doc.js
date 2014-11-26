@@ -527,6 +527,15 @@ function ready(target, callback){
     if(doc.document && doc.document.body){
         callback();
     }else if(typeof window !== 'undefined'){
+        if('attachEvent' in doc.document){
+            var off = doc.on('onreadystatechange', window, function(){
+                if(doc.document.readyState === 'complete'){
+                    callback();
+                    off();
+                }
+            });
+            return;
+        }
         doc.on('load', window, function(){
             callback();
         });

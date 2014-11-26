@@ -9,7 +9,9 @@
   "main": "fluent.js",
   "devDependencies": {
     "crel": "x.x.x",
-    "grape": "^1.0.2"
+    "grape": "^1.0.2",
+    "polyfill-function-prototype-bind": "0.0.1",
+    "tape-run": "0.3.0"
   },
   "repository": {
     "type": "git",
@@ -20,7 +22,11 @@
   },
   "contributors": [],
   "scripts": {
+    "test": "browserify test/index.js | tape-run -b chrome",
     "build": "browserify ./test/index.js > ./test/index.browser.js",
     "watch": "watchify ./test/index.js -o ./test/index.browser.js"
+  },
+  "dependencies": {
+    "domready": "^0.3.0"
   }
 }
