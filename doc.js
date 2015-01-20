@@ -6,7 +6,7 @@ var doc = {
 };
 
 var arrayProto = [],
-    isList = require('./isList');
+    isList = require('./isList'),
     getTargets = require('./getTargets')(doc.document),
     getTarget = require('./getTarget')(doc.document),
     space = ' ';
