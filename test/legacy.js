@@ -8,7 +8,7 @@ module.exports = function(test){
             crel('span'),
             crel('span'),
             crel('span')
-        )
+        );
 
         t.plan(1);
 
@@ -26,7 +26,7 @@ module.exports = function(test){
                     crel('span')
                 )
             )
-        )
+        );
 
         t.plan(1);
 
@@ -44,7 +44,7 @@ module.exports = function(test){
                     crel('span')
                 )
             )
-        )
+        );
 
         t.plan(1);
 
@@ -59,7 +59,7 @@ module.exports = function(test){
     test('find by class', function(t) {
         crel(document.body,
             crel('div', {'class':'things'})
-        )
+        );
 
         t.plan(1);
 
@@ -73,7 +73,7 @@ module.exports = function(test){
     test('find by class with reference', function(t) {
         crel(document.body,
             crel('div', {'class':'things'})
-        )
+        );
 
         t.plan(1);
 
@@ -87,7 +87,7 @@ module.exports = function(test){
     test('find with node reference', function(t) {
         crel(document.body,
             crel('div', {'class':'things'})
-        )
+        );
 
         t.plan(1);
 
@@ -101,7 +101,7 @@ module.exports = function(test){
     test('is', function(t) {
         crel(document.body,
             crel('div', {'class':'things'})
-        )
+        );
 
         t.plan(1);
 
@@ -113,7 +113,7 @@ module.exports = function(test){
     });
 
     test('parentless is', function(t) {
-        var element = crel('div', {'class':'things'})
+        var element = crel('div', {'class':'things'});
 
         t.plan(1);
 
@@ -127,7 +127,7 @@ module.exports = function(test){
     test('isnt..', function(t) {
         crel(document.body,
             crel('div', {'class':'things'})
-        )
+        );
 
         t.plan(1);
 
@@ -143,7 +143,7 @@ module.exports = function(test){
             crel('div', {'class':'things'},
                 crel('div', {'class':'stuff'})
             )
-        )
+        );
 
         t.plan(1);
 
@@ -161,7 +161,7 @@ module.exports = function(test){
             crel('div', {'class':'things'},
                 crel('div', {'class':'stuff'})
             )
-        )
+        );
 
         t.plan(1);
 
@@ -179,7 +179,7 @@ module.exports = function(test){
             crel('div', {'class':'things'},
                 crel('div', {'class':'stuff'})
             )
-        )
+        );
 
         t.plan(1);
 
@@ -199,7 +199,7 @@ module.exports = function(test){
             targetElement = crel('div', {'class':'things'},
                 crel('div', {'class':'stuff'})
             )
-        )
+        );
 
         t.plan(1);
 
@@ -218,7 +218,7 @@ module.exports = function(test){
             targetElement = crel('div', {'class':'things'},
                 crel('div', {'class':'stuff'})
             )
-        )
+        );
 
         t.plan(1);
 
@@ -239,7 +239,7 @@ module.exports = function(test){
             targetElement = crel('div', {'class':'things'},
                 crel('div', {'class':'stuff'})
             )
-        )
+        );
 
         t.plan(2);
 
@@ -265,7 +265,7 @@ module.exports = function(test){
             delegateElement = crel('div', {'class':'things'},
                 targetElement = crel('div', {'class':'stuff'})
             )
-        )
+        );
 
         t.plan(1);
 
@@ -288,7 +288,7 @@ module.exports = function(test){
 
         crel(document.body,
             targetElement = crel('div', {'class':'things'})
-        )
+        );
 
         t.plan(1);
 
@@ -307,7 +307,7 @@ module.exports = function(test){
 
         crel(document.body,
             targetElement = crel('div', {'class':'things'})
-        )
+        );
 
         t.plan(1);
 
@@ -326,7 +326,7 @@ module.exports = function(test){
 
         crel(document.body,
             targetElement = crel('div', {'class':'things'})
-        )
+        );
 
         t.plan(1);
 
@@ -345,7 +345,7 @@ module.exports = function(test){
 
         crel(document.body,
             targetElement = crel('div', {'class':'things stuff'})
-        )
+        );
 
         t.plan(1);
 
@@ -364,7 +364,7 @@ module.exports = function(test){
 
         crel(document.body,
             targetElement = crel('div', {'class':'things stuff'})
-        )
+        );
 
         t.plan(1);
 
@@ -384,7 +384,7 @@ module.exports = function(test){
 
         crel(document.body,
             targetElement = crel('div', {'class':'things'})
-        )
+        );
 
         t.plan(1);
 
@@ -406,7 +406,7 @@ module.exports = function(test){
             targetElement = crel('div', {'class':'things'},
                 crel('span')
             )
-        )
+        );
 
         t.plan(1);
 
@@ -416,6 +416,24 @@ module.exports = function(test){
             targetElement.firstChild,
             button,
             'element prepended'
+        );
+
+    });
+
+    test('indexOfElement', function(t) {
+        var targetElement;
+
+        crel(document.body,
+            crel('div', {'class':'the quick'}),
+            crel('div', {'class':'brown fox'}),
+            crel('div', {'class':'jumps over'}),
+            targetElement = crel('div', {'class':'the lazy dog'})
+        );
+
+        t.equal(
+            doc.indexOfElement(targetElement),
+            3,
+            'correct index returned'
         );
 
     });

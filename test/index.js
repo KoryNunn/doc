@@ -15,12 +15,12 @@ test = function(name, callback){
     oldTest(name, function(t){
         callback(t);
         reset();
-    })
-}
+    });
+};
 
 Element.prototype.toJSON = function(){
     return this.innerHTML || this.data;
-}
+};
 
 require('./fluent')(test);
 require('./legacy')(test);
