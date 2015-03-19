@@ -55,7 +55,7 @@ function find(target, query){
     }
 
     return target ? target.querySelectorAll(query) : [];
-};
+}
 
 /**
 
@@ -88,7 +88,7 @@ function findOne(target, query){
     }
 
     return target ? target.querySelector(query) : null;
-};
+}
 
 /**
 
@@ -119,7 +119,7 @@ function closest(target, query){
     }
 
     return target === doc.document && target !== query ? null : target;
-};
+}
 
 /**
 
@@ -161,9 +161,9 @@ function is(target, query){
     if(parentless){
         target.parentNode.removeChild(target);
     }
-        
+
     return result;
-};
+}
 
 /**
 
@@ -209,7 +209,7 @@ function addClass(target, classes){
         target.className = currentClasses.join(space);
     }
     return this;
-};
+}
 
 /**
 
@@ -259,7 +259,7 @@ function removeClass(target, classes){
         target.className = currentClasses.join(space);
     }
     return this;
-};
+}
 
 function addEvent(settings){
     var target = getTarget(settings.target);
@@ -357,7 +357,7 @@ function on(events, target, callback, proxy){
             getTarget(removeCallback.target).removeEventListener(removeCallback.event, removeCallback.callback);
         }
     }
-};
+}
 
 /**
 
@@ -409,7 +409,7 @@ function off(events, target, callback, proxy){
         }
     }
     return this;
-};
+}
 
 /**
 
@@ -440,7 +440,7 @@ function append(target, children){
     }
 
     target.appendChild(children);
-};
+}
 
 /**
 
@@ -472,7 +472,7 @@ function prepend(target, children){
     }
 
     target.insertBefore(children, target.firstChild);
-};
+}
 
 /**
 
@@ -503,8 +503,44 @@ function isVisible(target){
     }
 
     return target === doc.document;
-};
+}
 
+/**
+
+    ## .indexOfElement
+
+    returns the index of the element within it's parent element.
+
+        //fluent
+        doc(target).indexOfElement();
+
+        //legacy
+        doc.indexOfElement(target);
+
+*/
+
+function indexOfElement(target) {
+    target = getTargets(target);
+    if(!target){
+        return;
+    }
+
+    if(isList(target)){
+        target = target[0];
+    }
+
+    var i = -1;
+
+    var parent = target.parentElement;
+
+    if(!parent){
+        return i;
+    }
+
+    while(parent.children[++i] !== target){}
+
+    return i;
+}
 
 
 /**
@@ -512,6 +548,8 @@ function isVisible(target){
     ## .ready
 
     call a callback when the document is ready.
+
+    returns -1 if there is no parentElement on the target.
 
         //fluent
         doc().ready(callback);
@@ -529,7 +567,7 @@ function ready(callback){
     }else if(document.addEventListener){
         document.addEventListener("DOMContentLoaded",callback,false);
     }
-};
+}
 
 doc.find = find;
 doc.findOne = findOne;
@@ -543,5 +581,6 @@ doc.append = append;
 doc.prepend = prepend;
 doc.isVisible = isVisible;
 doc.ready = ready;
+doc.indexOfElement = indexOfElement;
 
 module.exports = doc;

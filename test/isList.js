@@ -30,7 +30,7 @@ module.exports = function(test){
                 crel('span'),
                 crel('span'),
                 crel('span')
-            )
+            );
 
         t.plan(1);
         t.ok(isList(parentElement.childNodes));
@@ -43,14 +43,14 @@ module.exports = function(test){
                 crel('span'),
                 crel('span'),
                 crel('span')
-            )
+            );
 
         t.plan(1);
         t.ok(isList(parentElement.children));
     });
 
     test('form is not list', function(t){
-        var form = crel('form')
+        var form = crel('form');
 
         t.plan(1);
         t.notOk(isList(form));
