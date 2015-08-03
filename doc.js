@@ -169,7 +169,7 @@ function is(target, query){
 
     ## .addClass
 
-    adds classes to the target
+    adds classes to the target (space separated string or array)
 
         //fluent
         doc(target).addClass(query);
@@ -191,7 +191,7 @@ function addClass(target, classes){
         return this;
     }
 
-    var classes = classes.split(space),
+    var classes = Array.isArray(classes) ? classes : classes.split(space),
         currentClasses = target.classList ? null : target.className.split(space);
 
     for(var i = 0; i < classes.length; i++){
@@ -215,7 +215,7 @@ function addClass(target, classes){
 
     ## .removeClass
 
-    removes classes from the target
+    removes classes from the target (space separated string or array)
 
         //fluent
         doc(target).removeClass(query);
@@ -238,7 +238,7 @@ function removeClass(target, classes){
         return this;
     }
 
-    var classes = classes.split(space),
+    var classes = Array.isArray(classes) ? classes : classes.split(space),
         currentClasses = target.classList ? null : target.className.split(space);
 
     for(var i = 0; i < classes.length; i++){

@@ -347,6 +347,25 @@ module.exports = function(test){
 
     });
 
+    test('add array of classes', function(t) {
+        var targetElement;
+
+        crel(document.body,
+            targetElement = crel('div', {'class':'things'})
+        );
+
+        t.plan(1);
+
+        doc('.things').addClass(['stuff', 'majigger']);
+
+        t.equal(
+            targetElement.className,
+            'things stuff majigger',
+            'target had new classes'
+        );
+
+    });
+
     test('add dupliacte class', function(t) {
         var targetElement;
 
@@ -395,6 +414,25 @@ module.exports = function(test){
         t.plan(1);
 
         doc('.things').removeClass('things stuff');
+
+        t.equal(
+            targetElement.className,
+            '',
+            'target had classes removed'
+        );
+
+    });
+
+    test('remove array of classes', function(t) {
+        var targetElement;
+
+        crel(document.body,
+            targetElement = crel('div', {'class':'things stuff'})
+        );
+
+        t.plan(1);
+
+        doc('.things').removeClass(['things', 'stuff']);
 
         t.equal(
             targetElement.className,
