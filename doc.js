@@ -559,7 +559,7 @@ function indexOfElement(target) {
 */
 
 function ready(callback){
-    if(doc.document && doc.document.readyState === 'complete'){
+    if(doc.document && (doc.document.readyState === 'complete' || doc.document.readyState === 'interactive')){
         callback();
     }else if(window.attachEvent){
         document.attachEvent("onreadystatechange", callback);

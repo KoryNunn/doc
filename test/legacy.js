@@ -459,6 +459,8 @@ module.exports = function(test){
     });
 
     test('indexOfElement', function(t) {
+        t.plan(1);
+
         var targetElement;
 
         crel(document.body,
