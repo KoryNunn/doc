@@ -2,7 +2,7 @@
 
 # What #
 
-a small, simple, and fast DOM helper library
+A small, simple, and fast DOM helper library.
 
 # Why? #
 
